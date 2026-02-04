@@ -1,0 +1,5 @@
+timestamp,source_ip,destination_ip,protocol,event_description,attack_type
+2026-02-01 10:00,192.168.1.10,10.0.0.5,TCP,Multiple failed logins,Brute Force
+2026-02-01 10:05,192.168.1.12,10.0.0.6,TCP,Port scanning detected,Port Scan
+2026-02-01 10:10,192.168.1.15,10.0.0.9,UDP,Traffic flood observed,DoS
+2026-02-01 10:15,192.168.1.18,10.0.0.11,HTTP,Suspicious script execution,Malware
