@@ -26,9 +26,14 @@ engine_config = {
     }
 }
 
-# Use NullPool for serverless (Vercel)
+# Use NullPool for serverless (Vercel) - no connection pooling, new connection per request
 if os.getenv("VERCEL"):
     engine_config["poolclass"] = NullPool
+else:
+    # Connection pooling for local/production servers
+    engine_config["pool_size"] = 5
+    engine_config["max_overflow"] = 10
+    engine_config["pool_recycle"] = 280  # Recycle before MySQL timeout (8 hours)
 
 engine = create_engine(DATABASE_URL, **engine_config)
 
