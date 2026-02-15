@@ -6,7 +6,13 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from database import Base
+
+# Use absolute imports for Vercel compatibility
+try:
+    from threatops.database import Base
+except ImportError:
+    # Fallback for local development
+    from database import Base
 
 
 class User(Base):
