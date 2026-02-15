@@ -4,47 +4,245 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SQL Query Panel</title>
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">ThreatOps SIEM</a>
-            <div class="navbar-nav">
-                <a class="nav-link" href="/dashboard">Dashboard</a>
-                <a class="nav-link" href="/upload">Upload CSV</a>
-                <a class="nav-link" href="/sql_panel">SQL Panel</a>
-                <a class="nav-link" href="/visualize">Visualize</a>
-            </div>
-        </div>
-    </nav>
+    {% include 'navbar.html' %}
 
     <main class="container my-4">
-        <h2>SQL Query Panel</h2>
-        <p class="text-muted">
-            Run SELECT queries against the ThreatOps database. Example:
-            <code>SELECT * FROM logs WHERE protocol='TCP' LIMIT 10</code>
-        </p>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
 
+        <h2>SQL Command Execution Panel</h2>
+        <p class="text-muted mb-4">Execute SQL queries with role-based access control. Your permissions are determined by your role.</p>
+
+        <!-- Role-Based Capabilities Card -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card shadow-sm">
+                    <div class="card-header {% if session.role == 'Admin' %}bg-danger text-white{% elif session.role == 'Engineer' %}bg-primary text-white{% elif session.role == 'Manager' %}bg-success text-white{% else %}bg-info text-white{% endif %}">
+                        <h5 class="mb-0">
+                            <i class="bi bi-shield-check"></i> Your Role: {{ session.role }}
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        {% if session.role == 'Admin' %}
+                        <h6 class="text-danger"><strong>Administrator Privileges</strong></h6>
+                        <p>As an <strong>Admin</strong>, you have unrestricted database access for system management and maintenance:</p>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-success mt-3">✅ Allowed Operations (Full Access):</h6>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><strong>DQL (Data Query Language):</strong> SELECT</li>
+                                    <li class="list-group-item"><strong>DML (Data Manipulation):</strong> INSERT, UPDATE, DELETE</li>
+                                    <li class="list-group-item"><strong>DDL (Data Definition):</strong> CREATE, ALTER, DROP, TRUNCATE</li>
+                                    <li class="list-group-item"><strong>DCL (Data Control):</strong> GRANT, REVOKE</li>
+                                    <li class="list-group-item"><strong>TCL (Transaction Control):</strong> COMMIT, ROLLBACK, SAVEPOINT</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-primary mt-3">🎯 Admin Responsibilities:</h6>
+                                <ul>
+                                    <li><strong>Database Management:</strong> Create/modify schemas and tables</li>
+                                    <li><strong>User Administration:</strong> Grant/revoke permissions, manage analyst accounts</li>
+                                    <li><strong>Data Governance:</strong> Modify critical security data, manage MITRE frameworks</li>
+                                    <li><strong>System Maintenance:</strong> Backup operations, schema updates, index optimization</li>
+                                    <li><strong>Audit & Compliance:</strong> Review all system activities, investigate incidents</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-warning mt-3 mb-0">
+                            <strong>⚠️ With great power comes great responsibility:</strong> All Admin queries are logged to AUDIT_LOGS for compliance and security auditing. Exercise caution when executing DDL/DML commands.
+                        </div>
+                        
+                        {% elif session.role == 'Engineer' %}
+                        <h6 class="text-primary"><strong>Security Engineer Privileges</strong></h6>
+                        <p>As a <strong>Security Engineer</strong>, you have full database access for system configuration and maintenance:</p>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-success mt-3">✅ Allowed Operations:</h6>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <strong>DQL (Data Query Language):</strong>
+                                        <ul class="mt-2">
+                                            <li>SELECT queries with JOINs, GROUP BY, HAVING</li>
+                                            <li>Aggregate functions (COUNT, SUM, AVG, MAX, MIN)</li>
+                                            <li>Nested subqueries and correlation</li>
+                                            <li>View queries (THREAT_INTELLIGENCE_DASHBOARD, USER_ACTIVITY_SUMMARY)</li>
+                                        </ul>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>DML (Data Manipulation):</strong> INSERT, UPDATE, DELETE
+                                        <br><small>For system maintenance and data management</small>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>DDL (Data Definition):</strong> CREATE, ALTER, DROP, TRUNCATE
+                                        <br><small>For schema updates and system configuration</small>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <h6 class="text-primary mt-3">🎯 Engineer Capabilities:</h6>
+                                <ul>
+                                    <li><strong>System Configuration:</strong> Modify database schemas and structures</li>
+                                    <li><strong>Data Management:</strong> Insert, update, and delete security logs</li>
+                                    <li><strong>Maintenance:</strong> Optimize tables and manage system performance</li>
+                                    <li><strong>Threat Analysis:</strong> Query logs, correlations, and MITRE mappings</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info mt-3 mb-0">
+                            <strong>💡 Access Control Policy:</strong> All queries are logged for audit compliance. Full database access enables system configuration and maintenance while maintaining security best practices.
+                        </div>
+                        
+                        {% else %}
+                        <h6 class="text-info"><strong>{{ session.role }} Privileges</strong></h6>
+                        <p>As a <strong>{{ session.role }}</strong>, your access is restricted to read-only operations to maintain data integrity:</p>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-success mt-3">✅ Allowed Operations:</h6>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <strong>DQL (Data Query Language):</strong>
+                                        <ul class="mt-2">
+                                            <li>SELECT queries with JOINs, GROUP BY, HAVING</li>
+                                            <li>Aggregate functions (COUNT, SUM, AVG, MAX, MIN)</li>
+                                            <li>Nested subqueries and correlation</li>
+                                            <li>View queries (THREAT_INTELLIGENCE_DASHBOARD, USER_ACTIVITY_SUMMARY)</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                
+                                <h6 class="text-primary mt-3">🎯 {{ session.role }} Capabilities:</h6>
+                                <ul>
+                                    <li><strong>Threat Analysis:</strong> Query logs, correlations, and MITRE mappings</li>
+                                    <li><strong>Alert Investigation:</strong> View security alerts and incident details</li>
+                                    <li><strong>Reporting:</strong> Generate security statistics and trend analysis</li>
+                                    {% if session.role in ['Analyst', 'Responder', 'Hunter'] %}
+                                    <li><strong>CSV Upload:</strong> Ingest new security logs (via Upload page)</li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <h6 class="text-danger mt-3">❌ Restricted Operations:</h6>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item text-danger">
+                                        <strong>DML (Data Manipulation):</strong> INSERT, UPDATE, DELETE
+                                        <br><small>Reason: Prevents accidental or malicious data modification</small>
+                                    </li>
+                                    <li class="list-group-item text-danger">
+                                        <strong>DDL (Data Definition):</strong> CREATE, ALTER, DROP, TRUNCATE
+                                        <br><small>Reason: Protects database schema integrity</small>
+                                    </li>
+                                    <li class="list-group-item text-danger">
+                                        <strong>DCL (Data Control):</strong> GRANT, REVOKE
+                                        <br><small>Reason: Prevents privilege escalation</small>
+                                    </li>
+                                    <li class="list-group-item text-danger">
+                                        <strong>TCL (Transaction Control):</strong> COMMIT, ROLLBACK, SAVEPOINT
+                                        <br><small>Reason: Transaction management requires admin oversight</small>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info mt-3 mb-0">
+                            <strong>💡 Access Control Policy:</strong> All queries are logged for audit compliance. Read-only access protects data integrity and maintains security best practices while enabling comprehensive threat analysis and reporting.
+                        </div>
+                        
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SQL Query Input Card -->
         <div class="card p-4 shadow-sm">
-            <label for="sql-query" class="form-label">SQL Query</label>
-            <textarea id="sql-query" class="form-control" rows="4"></textarea>
-            <button id="run-query" class="btn btn-primary mt-3">Execute Query</button>
+            <label for="sql-query" class="form-label">
+                <strong>SQL Query</strong>
+                {% if session.role in ['Admin', 'Engineer'] %}
+                <span class="badge bg-danger">Full Access</span>
+                {% else %}
+                <span class="badge bg-info">SELECT Only</span>
+                {% endif %}
+            </label>
+            <textarea id="sql-query" class="form-control font-monospace" rows="6" placeholder="Enter your SQL query here...
+Example: SELECT * FROM RAW_LOGS WHERE severity='Critical' LIMIT 10"></textarea>
+            <button id="run-query" class="btn btn-primary mt-3">
+                <i class="bi bi-play-fill"></i> Execute Query
+            </button>
             <div id="query-message" class="mt-3"></div>
         </div>
 
+        <!-- Example Queries -->
+        <div class="mt-4">
+            <h5>Quick Queries (Click to Load):</h5>
+            <div class="list-group">
+                <button class="list-group-item list-group-item-action" 
+                    onclick="setQuery(this.getAttribute('data-query'))" 
+                    data-query="SELECT * FROM RAW_LOGS LIMIT 10">
+                    <strong>Recent Logs</strong> - Basic SELECT
+                </button>
+                <button class="list-group-item list-group-item-action" 
+                    onclick="setQuery(this.getAttribute('data-query'))" 
+                    data-query="SELECT severity, COUNT(*) AS count FROM RAW_LOGS GROUP BY severity">
+                    <strong>Severity Distribution</strong> - GROUP BY
+                </button>
+                <button class="list-group-item list-group-item-action" 
+                    onclick="setQuery(this.getAttribute('data-query'))" 
+                    data-query="SELECT * FROM THREAT_INTELLIGENCE_DASHBOARD LIMIT 20">
+                    <strong>Threat Dashboard</strong> - Multi-table VIEW
+                </button>
+                <button class="list-group-item list-group-item-action" 
+                    onclick="setQuery(this.getAttribute('data-query'))" 
+                    data-query="SELECT technique_name, COUNT(*) as count FROM THREAT_CORRELATION tc JOIN MITRE_ATTACK_TECHNIQUES mat ON tc.technique_id = mat.technique_id GROUP BY technique_name ORDER BY count DESC LIMIT 5">
+                    <strong>Top Attack Techniques</strong> - JOIN + GROUP BY
+                </button>
+                <button class="list-group-item list-group-item-action" 
+                    onclick="setQuery(this.getAttribute('data-query'))" 
+                    data-query="SELECT * FROM ALERTS WHERE severity = 'Critical' AND status = 'Open'">
+                    <strong>Critical Open Alerts</strong> - WHERE conditions
+                </button>
+                <button class="list-group-item list-group-item-action" 
+                    onclick="setQuery(this.getAttribute('data-query'))" 
+                    data-query="SELECT mdc.countermeasure_name, SUM(mdc.implementation_cost) as total_cost FROM MITRE_DEFEND_COUNTERMEASURES mdc GROUP BY mdc.countermeasure_name ORDER BY total_cost DESC LIMIT 5">
+                    <strong>Costliest Countermeasures</strong> - SUM aggregation
+                </button>
+            </div>
+        </div>
+
+        <!-- Query Results Table -->
         <div class="table-responsive mt-4">
-            <table class="table table-bordered" id="query-results">
-                <thead></thead>
+            <table class="table table-bordered table-sm table-hover" id="query-results">
+                <thead class="table-dark"></thead>
                 <tbody></tbody>
             </table>
         </div>
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        function setQuery(query) {
+            document.getElementById('sql-query').value = query;
+        }
+    </script>
 </body>
 </html>

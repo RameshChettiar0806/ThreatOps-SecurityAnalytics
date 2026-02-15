@@ -4,54 +4,59 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Upload Logs</title>
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">ThreatOps SIEM</a>
-            <div class="navbar-nav">
-                <a class="nav-link" href="/dashboard">Dashboard</a>
-                <a class="nav-link" href="/upload">Upload CSV</a>
-                <a class="nav-link" href="/sql_panel">SQL Panel</a>
-                <a class="nav-link" href="/visualize">Visualize</a>
-            </div>
-        </div>
-    </nav>
+    {% include 'navbar.html' %}
 
     <main class="container my-4">
-        <h2>Upload Custom CSV Logs</h2>
-        <p class="text-muted">Ensure your CSV contains the required headers.</p>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
 
-        {% if error %}
-        <div class="alert alert-danger">{{ error }}</div>
-        {% endif %}
-        {% if success %}
-        <div class="alert alert-success">{{ success }}</div>
-        {% endif %}
+        <h2>Upload Security Logs (CSV)</h2>
+        <p class="text-muted">Upload CSV files to automatically correlate threats using stored procedures. Triggers will log the upload to audit trail.</p>
 
         <form method="POST" enctype="multipart/form-data" class="card p-4 shadow-sm">
             <div class="mb-3">
                 <label for="file" class="form-label">Select CSV file</label>
-                <input class="form-control" type="file" id="file" name="file" required />
+                <input class="form-control" type="file" id="file" name="file" accept=".csv" required />
             </div>
-            <button class="btn btn-primary" type="submit">Upload CSV</button>
+            <div class="mb-3 form-check">
+                <input class="form-check-input" type="checkbox" id="clear_existing" name="clear_existing" value="yes" />
+                <label class="form-check-label" for="clear_existing">
+                    <strong>Clear existing logs before upload</strong>
+                    <br />
+                    <small class="text-muted">This will delete all current logs (including sample data) and replace them with your uploaded CSV</small>
+                </label>
+            </div>
+            <button class="btn btn-primary" type="submit">Upload and Process CSV</button>
         </form>
 
         <div class="mt-4">
-            <h5>Required Headers</h5>
+            <h5>Required CSV Headers</h5>
             <ul>
-                <li>timestamp</li>
-                <li>source_ip</li>
-                <li>destination_ip</li>
-                <li>protocol</li>
-                <li>event_description</li>
-                <li>attack_type</li>
+                <li><code>timestamp</code> - Format: YYYY-MM-DD HH:MM:SS</li>
+                <li><code>source_ip</code> - Source IP address</li>
+                <li><code>destination_ip</code> - Destination IP address</li>
+                <li><code>protocol</code> - Protocol (TCP, UDP, HTTP, etc.)</li>
+                <li><code>port</code> - Port number (1-65535)</li>
+                <li><code>event_description</code> - Description of the event</li>
+                <li><code>severity</code> - Low, Medium, High, or Critical</li>
             </ul>
+            <div class="alert alert-info">
+                <strong>Note:</strong> Upload uses transactions (START TRANSACTION/ROLLBACK/COMMIT). 
+                The CORRELATE_THREAT stored procedure will automatically map logs to MITRE techniques, 
+                and GENERATE_ALERT will create alerts. Triggers will audit the upload.
+            </div>
         </div>
     </main>
 

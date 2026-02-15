@@ -1,3 +1,24 @@
+// Format number with Indian notation - simplified
+function formatIndianNumber(num, addRupeeSymbol = true) {
+    if (num === null || num === undefined || isNaN(num)) return addRupeeSymbol ? '₹0.00' : '0';
+    
+    const absNum = Math.abs(num);
+    let formatted;
+    
+    if (absNum >= 10000000) {
+        formatted = (absNum / 10000000).toFixed(2) + ' Cr';
+    } else if (absNum >= 100000) {
+        formatted = (absNum / 100000).toFixed(2) + ' L';
+    } else if (absNum >= 1000) {
+        formatted = (absNum / 1000).toFixed(2) + 'K';
+    } else {
+        formatted = absNum.toFixed(2);
+    }
+    
+    const prefix = addRupeeSymbol ? '₹' : '';
+    return num < 0 ? `-${prefix}${formatted}` : `${prefix}${formatted}`;
+}
+
 const loadSampleButton = document.getElementById("load-sample");
 const loadSampleForm = document.getElementById("load-sample-form");
 const loadSampleMessage = document.getElementById("load-sample-message");
@@ -95,7 +116,20 @@ const renderQueryResults = (columns, rows) => {
         const tr = document.createElement("tr");
         columns.forEach((column) => {
             const td = document.createElement("td");
-            td.textContent = row[column];
+            const value = row[column];
+            
+            // Check if column name suggests it's a currency value
+            const currencyColumns = ['implementation_cost', 'total_cost', 'cost', 'amount', 'price'];
+            const isCurrency = currencyColumns.some(col => column.toLowerCase().includes(col));
+            
+            // Format numeric values
+            if (isCurrency && value !== null && !isNaN(value)) {
+                td.textContent = formatIndianNumber(parseFloat(value));
+            } else if (!isCurrency && typeof value === 'number') {
+                td.textContent = formatIndianNumber(value, false);
+            } else {
+                td.textContent = value;
+            }
             tr.appendChild(td);
         });
         tbody.appendChild(tr);

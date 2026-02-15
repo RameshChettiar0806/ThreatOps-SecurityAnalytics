@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ThreatOps - Login</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body class="bg-light">
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow-lg">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-4">
+                            <h2 class="fw-bold text-primary">ThreatOps SIEM</h2>
+                            <p class="text-muted">Security Analytics Platform</p>
+                        </div>
+
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                {% for category, message in messages %}
+                                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                        {{ message }}
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+
+                        <form method="POST" action="{{ url_for('login') }}">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" required autofocus />
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required />
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">Login</button>
+                            </div>
+                        </form>
+
+                        <!-- SOC/CIRT Team Users Table -->
+                        <div class="mt-4">
+                            <div class="card border-primary">
+                                <div class="card-header bg-primary text-white">
+                                    <h6 class="mb-0">SOC/CIRT Team Access <small class="text-white-50">(Click to auto-fill)</small></h6>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                                        <table class="table table-sm table-hover mb-0">
+                                            <thead class="table-light sticky-top">
+                                                <tr>
+                                                    <th>Username</th>
+                                                    <th>Role</th>
+                                                    <th>Password</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="userTable">
+                                                <tr class="user-row" style="cursor: pointer;" data-username="rajesh_kumar" data-password="ADM123" onclick="fillCredentials('rajesh_kumar', 'ADM123')">
+                                                    <td><small><strong>rajesh_kumar</strong></small></td>
+                                                    <td><span class="badge bg-danger">Admin</span></td>
+                                                    <td><small><code>ADM123</code></small></td>
+                                                </tr>
+                                                <tr class="user-row" style="cursor: pointer;" data-username="deepak_verma" data-password="ADM123" onclick="fillCredentials('deepak_verma', 'ADM123')">
+                                                    <td><small><strong>deepak_verma</strong></small></td>
+                                                    <td><span class="badge bg-danger">Admin</span></td>
+                                                    <td><small><code>ADM123</code></small></td>
+                                                </tr>
+                                                <tr class="user-row" style="cursor: pointer;" data-username="priya_sharma" data-password="MGR123" onclick="fillCredentials('priya_sharma', 'MGR123')">
+                                                    <td><small><strong>priya_sharma</strong></small></td>
+                                                    <td><span class="badge bg-success">Manager</span></td>
+                                                    <td><small><code>MGR123</code></small></td>
+                                                </tr>
+                                                <tr class="user-row" style="cursor: pointer;" data-username="amit_patel" data-password="ANLST123" onclick="fillCredentials('amit_patel', 'ANLST123')">
+                                                    <td><small><strong>amit_patel</strong></small></td>
+                                                    <td><span class="badge bg-info">Analyst</span></td>
+                                                    <td><small><code>ANLST123</code></small></td>
+                                                </tr>
+                                                <tr class="user-row" style="cursor: pointer;" data-username="sneha_singh" data-password="ANLST123" onclick="fillCredentials('sneha_singh', 'ANLST123')">
+                                                    <td><small><strong>sneha_singh</strong></small></td>
+                                                    <td><span class="badge bg-info">Analyst</span></td>
+                                                    <td><small><code>ANLST123</code></small></td>
+                                                </tr>
+                                                <tr class="user-row" style="cursor: pointer;" data-username="rohan_gupta" data-password="ANLST123" onclick="fillCredentials('rohan_gupta', 'ANLST123')">
+                                                    <td><small><strong>rohan_gupta</strong></small></td>
+                                                    <td><span class="badge bg-info">Analyst</span></td>
+                                                    <td><small><code>ANLST123</code></small></td>
+                                                </tr>
+                                                <tr class="user-row" style="cursor: pointer;" data-username="meera_krishnan" data-password="ANLST123" onclick="fillCredentials('meera_krishnan', 'ANLST123')">
+                                                    <td><small><strong>meera_krishnan</strong></small></td>
+                                                    <td><span class="badge bg-info">Analyst</span></td>
+                                                    <td><small><code>ANLST123</code></small></td>
+                                                </tr>
+                                                <tr class="user-row" style="cursor: pointer;" data-username="arjun_reddy" data-password="ENG123" onclick="fillCredentials('arjun_reddy', 'ENG123')">
+                                                    <td><small><strong>arjun_reddy</strong></small></td>
+                                                    <td><span class="badge bg-primary">Engineer</span></td>
+                                                    <td><small><code>ENG123</code></small></td>
+                                                </tr>
+                                                <tr class="user-row" style="cursor: pointer;" data-username="vikram_desai" data-password="ENG123" onclick="fillCredentials('vikram_desai', 'ENG123')">
+                                                    <td><small><strong>vikram_desai</strong></small></td>
+                                                    <td><span class="badge bg-primary">Engineer</span></td>
+                                                    <td><small><code>ENG123</code></small></td>
+                                                </tr>
+                                                <tr class="user-row" style="cursor: pointer;" data-username="kavya_iyer" data-password="RESP123" onclick="fillCredentials('kavya_iyer', 'RESP123')">
+                                                    <td><small><strong>kavya_iyer</strong></small></td>
+                                                    <td><span class="badge bg-warning text-dark">Responder</span></td>
+                                                    <td><small><code>RESP123</code></small></td>
+                                                </tr>
+                                                <tr class="user-row" style="cursor: pointer;" data-username="sanjay_rao" data-password="RESP123" onclick="fillCredentials('sanjay_rao', 'RESP123')">
+                                                    <td><small><strong>sanjay_rao</strong></small></td>
+                                                    <td><span class="badge bg-warning text-dark">Responder</span></td>
+                                                    <td><small><code>RESP123</code></small></td>
+                                                </tr>
+                                                <tr class="user-row" style="cursor: pointer;" data-username="ananya_nair" data-password="HUNT123" onclick="fillCredentials('ananya_nair', 'HUNT123')">
+                                                    <td><small><strong>ananya_nair</strong></small></td>
+                                                    <td><span class="badge bg-dark">Hunter</span></td>
+                                                    <td><small><code>HUNT123</code></small></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-3 text-muted small">
+                    <p>&copy; 2026 ThreatOps Security Analytics</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Auto-fill credentials when user clicks on table row
+        function fillCredentials(username, password) {
+            document.getElementById('username').value = username;
+            document.getElementById('password').value = password;
+            
+            // Add visual feedback
+            const usernameField = document.getElementById('username');
+            const passwordField = document.getElementById('password');
+            
+            usernameField.classList.add('border-success');
+            passwordField.classList.add('border-success');
+            
+            // Focus on login button
+            setTimeout(() => {
+                usernameField.classList.remove('border-success');
+                passwordField.classList.remove('border-success');
+            }, 1000);
+            
+            // Scroll to top to show filled fields
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Add hover effect styling
+        const style = document.createElement('style');
+        style.textContent = `
+            .user-row:hover {
+                background-color: #e7f3ff !important;
+                transition: background-color 0.2s ease;
+            }
+            .user-row:active {
+                background-color: #cce5ff !important;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

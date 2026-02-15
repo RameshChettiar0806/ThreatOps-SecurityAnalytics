@@ -19,3 +19,33 @@ body {
     background-color: #212529;
     color: #fff;
 }
+/* Role-specific color schemes */
+.role-admin {
+    background-color: #dc3545 !important;
+    color: white !important;
+}
+
+.role-manager {
+    background-color: #0dcaf0 !important;
+    color: #000 !important;
+}
+
+.role-analyst {
+    background-color: #17a2b8 !important;
+    color: white !important;
+}
+
+.role-engineer {
+    background-color: #20c997 !important;
+    color: #000 !important;
+}
+
+.role-responder {
+    background-color: #fd7e14 !important;
+    color: white !important;
+}
+
+.role-hunter {
+    background-color: #6f42c1 !important;
+    color: white !important;
+}
