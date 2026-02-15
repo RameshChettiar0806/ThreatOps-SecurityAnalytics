@@ -7,9 +7,11 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy.pool import NullPool
 from dotenv import load_dotenv
 
-# Load .env file from parent directory
-env_path = Path(__file__).parent.parent / ".env"
-load_dotenv(dotenv_path=env_path)
+# Load .env file - handle both local and Vercel environments
+if not os.getenv("VERCEL"):
+    env_path = Path(__file__).parent.parent / ".env"
+    if env_path.exists():
+        load_dotenv(dotenv_path=env_path)
 
 # Database URL with connection pooling for production
 DATABASE_URL = os.getenv(

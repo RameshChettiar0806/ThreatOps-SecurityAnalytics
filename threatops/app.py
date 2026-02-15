@@ -3,6 +3,7 @@
 import csv
 import hashlib
 import logging
+import os
 from datetime import datetime
 from functools import wraps
 from io import TextIOWrapper
@@ -12,11 +13,20 @@ from flask import Flask, jsonify, render_template, request, session, redirect, u
 from sqlalchemy import func, text
 from sqlalchemy.exc import SQLAlchemyError
 
-from database import Base, SessionLocal, engine
-from models import (
-    User, RawLog, MitreAttackTechnique, MitreDefendCountermeasure,
-    ThreatCorrelation, Alert, AuditLog
-)
+# Use absolute imports for Vercel compatibility
+try:
+    from threatops.database import Base, SessionLocal, engine
+    from threatops.models import (
+        User, RawLog, MitreAttackTechnique, MitreDefendCountermeasure,
+        ThreatCorrelation, Alert, AuditLog
+    )
+except ImportError:
+    # Fallback for local development
+    from database import Base, SessionLocal, engine
+    from models import (
+        User, RawLog, MitreAttackTechnique, MitreDefendCountermeasure,
+        ThreatCorrelation, Alert, AuditLog
+    )
 
 
 # Configure logging
