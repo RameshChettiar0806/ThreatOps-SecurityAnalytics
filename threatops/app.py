@@ -34,9 +34,10 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-app.secret_key = 'threatops_secret_key_change_in_production'  # Change in production!
+app.secret_key = os.getenv('SECRET_KEY', 'threatops_secret_key_change_in_production')
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+app.config['SESSION_COOKIE_SECURE'] = os.getenv('VERCEL') is not None  # Secure cookies in production
 
 SAMPLE_CSV_PATH = Path(__file__).parent / "sample_logs.csv"
 
