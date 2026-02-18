@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
-<body>
+<body class="role-bg-{{ session.role.lower() if session.role else 'analyst' }}">
     {% include 'navbar.html' %}
 
     <main class="container my-4">

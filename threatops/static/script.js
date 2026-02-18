@@ -137,6 +137,8 @@ const renderQueryResults = (columns, rows) => {
 };
 
 const buildChartConfig = (chartType, labels, dataPoints) => {
+    const isPieOrDoughnut = (chartType === 'pie' || chartType === 'doughnut');
+    
     const baseConfig = {
         type: chartType === "stackedBar" ? "bar" : chartType,
         data: {
@@ -153,16 +155,56 @@ const buildChartConfig = (chartType, labels, dataPoints) => {
                         "#ffc107",
                         "#20c997",
                         "#6f42c1",
+                        "#fd7e14",
+                        "#17a2b8",
                     ],
+                    borderWidth: 2,
+                    borderColor: '#fff'
                 },
             ],
         },
         options: {
             responsive: true,
+            maintainAspectRatio: true,
+            aspectRatio: isPieOrDoughnut ? 1.5 : 2,
             plugins: {
                 legend: {
-                    position: "bottom",
+                    position: isPieOrDoughnut ? "right" : "bottom",
+                    labels: {
+                        padding: 15,
+                        font: {
+                            size: 12
+                        },
+                        generateLabels: function(chart) {
+                            const data = chart.data;
+                            if (data.labels.length && data.datasets.length) {
+                                return data.labels.map((label, i) => {
+                                    const value = data.datasets[0].data[i];
+                                    const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((value / total) * 100).toFixed(1);
+                                    return {
+                                        text: `${label}: ${value} (${percentage}%)`,
+                                        fillStyle: data.datasets[0].backgroundColor[i],
+                                        hidden: false,
+                                        index: i
+                                    };
+                                });
+                            }
+                            return [];
+                        }
+                    }
                 },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.parsed.y || context.parsed || 0;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((value / total) * 100).toFixed(1);
+                            return `${label}: ${value} (${percentage}%)`;
+                        }
+                    }
+                }
             },
         },
     };
@@ -171,6 +213,10 @@ const buildChartConfig = (chartType, labels, dataPoints) => {
         baseConfig.options.scales = {
             x: { stacked: true },
             y: { stacked: true, beginAtZero: true },
+        };
+    } else if (!isPieOrDoughnut) {
+        baseConfig.options.scales = {
+            y: { beginAtZero: true }
         };
     }
 

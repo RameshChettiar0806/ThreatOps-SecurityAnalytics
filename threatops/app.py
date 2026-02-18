@@ -249,6 +249,8 @@ def dashboard():
             SELECT 
                 COUNT(DISTINCT rl.log_id) AS total_logs,
                 COUNT(DISTINCT CASE WHEN rl.severity = 'Critical' THEN rl.log_id END) AS critical_logs,
+                COUNT(DISTINCT CASE WHEN rl.severity = 'High' THEN rl.log_id END) AS high_logs,
+                COUNT(DISTINCT CASE WHEN rl.severity = 'Low' THEN rl.log_id END) AS low_logs,
                 COUNT(DISTINCT tc.correlation_id) AS total_correlations,
                 COUNT(DISTINCT a.alert_id) AS total_alerts,
                 COUNT(DISTINCT CASE WHEN a.status = 'Open' THEN a.alert_id END) AS open_alerts
