@@ -17,7 +17,7 @@ except ImportError:
 
 class User(Base):
     """User authentication and RBAC."""
-    __tablename__ = "USERS"
+    __tablename__ = "users"
 
     user_id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String(50), unique=True, nullable=False)
@@ -35,7 +35,7 @@ class User(Base):
 
 class RawLog(Base):
     """Raw security event logs."""
-    __tablename__ = "RAW_LOGS"
+    __tablename__ = "raw_logs"
 
     log_id = Column(Integer, primary_key=True, autoincrement=True)
     timestamp = Column(DateTime, nullable=False)
@@ -47,7 +47,7 @@ class RawLog(Base):
     port = Column(Integer, CheckConstraint('port BETWEEN 1 AND 65535'))
     event_description = Column(Text, nullable=False)
     severity = Column(Enum('Low', 'Medium', 'High', 'Critical'), nullable=False)
-    uploaded_by = Column(Integer, ForeignKey('USERS.user_id', ondelete='SET NULL'))
+    uploaded_by = Column(Integer, ForeignKey('users.user_id', ondelete='SET NULL'))
     created_at = Column(TIMESTAMP, server_default=func.current_timestamp())
 
     # Relationships
@@ -64,7 +64,7 @@ class RawLog(Base):
 
 class MitreAttackTechnique(Base):
     """MITRE ATT&CK Techniques."""
-    __tablename__ = "MITRE_ATTACK_TECHNIQUES"
+    __tablename__ = "mitre_attack_techniques"
 
     technique_id = Column(String(50), primary_key=True)
     technique_name = Column(String(255), nullable=False)
@@ -82,7 +82,7 @@ class MitreAttackTechnique(Base):
 
 class MitreDefendCountermeasure(Base):
     """MITRE D3FEND Countermeasures."""
-    __tablename__ = "MITRE_DEFEND_COUNTERMEASURES"
+    __tablename__ = "mitre_defend_countermeasures"
 
     countermeasure_id = Column(String(50), primary_key=True)
     countermeasure_name = Column(String(255), nullable=False)
@@ -97,15 +97,15 @@ class MitreDefendCountermeasure(Base):
 
 class ThreatCorrelation(Base):
     """Links logs to MITRE frameworks."""
-    __tablename__ = "THREAT_CORRELATION"
+    __tablename__ = "threat_correlation"
 
     correlation_id = Column(Integer, primary_key=True, autoincrement=True)
-    log_id = Column(Integer, ForeignKey('RAW_LOGS.log_id', ondelete='CASCADE'), nullable=False)
-    technique_id = Column(String(50), ForeignKey('MITRE_ATTACK_TECHNIQUES.technique_id'), nullable=False)
-    countermeasure_id = Column(String(50), ForeignKey('MITRE_DEFEND_COUNTERMEASURES.countermeasure_id'))
+    log_id = Column(Integer, ForeignKey('raw_logs.log_id', ondelete='CASCADE'), nullable=False)
+    technique_id = Column(String(50), ForeignKey('mitre_attack_techniques.technique_id'), nullable=False)
+    countermeasure_id = Column(String(50), ForeignKey('mitre_defend_countermeasures.countermeasure_id'))
     confidence_score = Column(Numeric(3, 2), CheckConstraint('confidence_score BETWEEN 0 AND 1'))
     correlated_at = Column(TIMESTAMP, server_default=func.current_timestamp())
-    correlated_by = Column(Integer, ForeignKey('USERS.user_id', ondelete='SET NULL'))
+    correlated_by = Column(Integer, ForeignKey('users.user_id', ondelete='SET NULL'))
 
     # Relationships
     log = relationship("RawLog", back_populates="correlations")
@@ -121,15 +121,15 @@ class ThreatCorrelation(Base):
 
 class Alert(Base):
     """Generated threat alerts."""
-    __tablename__ = "ALERTS"
+    __tablename__ = "alerts"
 
     alert_id = Column(Integer, primary_key=True, autoincrement=True)
-    correlation_id = Column(Integer, ForeignKey('THREAT_CORRELATION.correlation_id', ondelete='CASCADE'), nullable=False)
+    correlation_id = Column(Integer, ForeignKey('threat_correlation.correlation_id', ondelete='CASCADE'), nullable=False)
     alert_type = Column(Enum('Intrusion', 'Data Breach', 'Malware', 'DDoS', 
                              'Privilege Escalation', 'Reconnaissance'), nullable=False)
     severity = Column(Enum('Low', 'Medium', 'High', 'Critical'), nullable=False)
     status = Column(Enum('Open', 'In Progress', 'Resolved', 'False Positive'), default='Open')
-    assigned_to = Column(Integer, ForeignKey('USERS.user_id', ondelete='SET NULL'))
+    assigned_to = Column(Integer, ForeignKey('users.user_id', ondelete='SET NULL'))
     description = Column(Text)
     created_at = Column(TIMESTAMP, server_default=func.current_timestamp())
     resolved_at = Column(TIMESTAMP, nullable=True)
@@ -146,10 +146,10 @@ class Alert(Base):
 
 class AuditLog(Base):
     """System audit trail."""
-    __tablename__ = "AUDIT_LOGS"
+    __tablename__ = "audit_logs"
 
     audit_id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey('USERS.user_id', ondelete='SET NULL'))
+    user_id = Column(Integer, ForeignKey('users.user_id', ondelete='SET NULL'))
     action_type = Column(Enum('LOGIN', 'LOGOUT', 'QUERY_EXECUTION', 'CSV_UPLOAD', 
                               'ALERT_CREATION', 'USER_MANAGEMENT', 'DATA_MODIFICATION'), nullable=False)
     action_details = Column(Text)
