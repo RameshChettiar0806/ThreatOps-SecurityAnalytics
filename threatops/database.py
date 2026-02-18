@@ -31,16 +31,23 @@ engine_config = {
     "pool_pre_ping": True,
 }
 
+# Detect if running in serverless environment (Vercel)
+is_serverless = os.getenv("VERCEL") is not None
+
 # PostgreSQL/Supabase specific configuration
 if is_postgres:
     engine_config["connect_args"] = {
         "connect_timeout": 10,
         "sslmode": "require",  # Supabase requires SSL
     }
-    # Connection pooling for PostgreSQL
-    engine_config["pool_size"] = 5
-    engine_config["max_overflow"] = 10
-    engine_config["pool_recycle"] = 3600  # Recycle connections after 1 hour
+    # For serverless (Vercel), use NullPool - no connection pooling
+    if is_serverless:
+        engine_config["poolclass"] = NullPool
+    else:
+        # Connection pooling for PostgreSQL (local dev)
+        engine_config["pool_size"] = 5
+        engine_config["max_overflow"] = 10
+        engine_config["pool_recycle"] = 3600  # Recycle connections after 1 hour
 else:
     # MySQL configuration
     engine_config["connect_args"] = {
