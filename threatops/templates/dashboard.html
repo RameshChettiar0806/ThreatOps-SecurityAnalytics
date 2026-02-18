@@ -55,6 +55,31 @@
             {% endif %}
         {% endwith %}
 
+        <!-- Threat Level Indicator -->
+        <div class="threat-level-indicator">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h5 class="text-white mb-3">🛡️ Real-Time Threat Level Monitor</h5>
+                    <div class="threat-gauge">
+                        <div class="threat-gauge-fill" id="threatGaugeFill" style="width: 0%;"></div>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2 text-white small">
+                        <span>Low</span>
+                        <span>Medium</span>
+                        <span>High</span>
+                        <span>Critical</span>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="text-white">
+                        <h6 class="mb-2">Current Status</h6>
+                        <h2 class="display-6" id="threatStatus" style="color: #00d9ff;">Calculating...</h2>
+                        <p class="small mb-0" id="threatDesc">Analyzing system threats</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <h2 class="mb-4">Threat Intelligence Dashboard</h2>
 
         <!-- Statistics Cards -->
@@ -141,5 +166,55 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Threat Level Indicator Animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const totalLogs = {{ stats.total_logs or 0 }};
+            const criticalLogs = {{ stats.critical_logs or 0 }};
+            const openAlerts = {{ stats.open_alerts or 0 }};
+            
+            // Calculate threat level (0-100)
+            let threatLevel = 0;
+            let threatStatus = 'SECURE';
+            let threatColor = '#10b981';
+            let threatDesc = 'All systems nominal';
+            
+            if (totalLogs > 0) {
+                const criticalPercent = (criticalLogs / totalLogs) * 100;
+                const alertFactor = Math.min(openAlerts * 5, 50);
+                threatLevel = Math.min(criticalPercent + alertFactor, 100);
+                
+                if (threatLevel < 25) {
+                    threatStatus = 'SECURE';
+                    threatColor = '#10b981';
+                    threatDesc = 'All systems operating normally';
+                } else if (threatLevel < 50) {
+                    threatStatus = 'ELEVATED';
+                    threatColor = '#fbbf24';
+                    threatDesc = 'Some threats detected, monitoring';
+                } else if (threatLevel < 75) {
+                    threatStatus = 'HIGH';
+                    threatColor = '#f59e0b';
+                    threatDesc = 'Multiple threats detected, action required';
+                } else {
+                    threatStatus = 'CRITICAL';
+                    threatColor = '#ef4444';
+                    threatDesc = 'Severe threats detected, immediate action required';
+                }
+            }
+            
+            // Animate gauge fill
+            const gaugeFill = document.getElementById('threatGaugeFill');
+            const statusElement = document.getElementById('threatStatus');
+            const descElement = document.getElementById('threatDesc');
+            
+            setTimeout(() => {
+                gaugeFill.style.width = threatLevel + '%';
+                statusElement.textContent = threatStatus;
+                statusElement.style.color = threatColor;
+                descElement.textContent = threatDesc;
+            }, 300);
+        });
+    </script>
 </body>
 </html>

@@ -1,51 +1,442 @@
+/* ============================================
+   ThreatOps SIEM - Defensive Security Theme
+   Color Palette: Navy Blue + Electric Blue
+   ============================================ */
+
+:root {
+    --primary-blue: #1e88e5;
+    --cyber-blue: #00d9ff;
+    --navy-dark: #0a1628;
+    --navy-medium: #1a2332;
+    --steel-blue: #4a5568;
+    --alert-critical: #ef4444;
+    --alert-high: #f59e0b;
+    --alert-medium: #fbbf24;
+    --alert-low: #10b981;
+    --glass-bg: rgba(255, 255, 255, 0.95);
+    --shadow-glow: 0 0 20px rgba(30, 136, 229, 0.3);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    background-color: #f7f9fc;
+    background: linear-gradient(135deg, #e8f4f8 0%, #ffffff 50%, #e3f2fd 100%);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    background-attachment: fixed;
+    position: relative;
+    overflow-x: hidden;
 }
 
-.hero-section {
-    background: linear-gradient(135deg, #0d6efd, #6610f2);
-    color: #fff;
-    padding: 4rem 0;
+/* Animated Grid Background Pattern */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(rgba(30, 136, 229, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(30, 136, 229, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    z-index: -1;
+    animation: gridMove 30s linear infinite;
 }
 
-.chart-container {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    padding: 1.5rem;
+@keyframes gridMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 50px 50px; }
 }
 
-#query-results thead {
-    background-color: #212529;
-    color: #fff;
+/* ============================================
+   NAVBAR - Dark Cyber Theme
+   ============================================ */
+.navbar {
+    background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-medium) 100%) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 2px solid var(--cyber-blue);
+    box-shadow: 0 4px 30px rgba(0, 217, 255, 0.2);
+    padding: 1rem 0;
 }
-/* Role-specific color schemes */
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--cyber-blue) !important;
+    text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+    transition: all 0.3s ease;
+}
+
+.navbar-brand:hover {
+    text-shadow: 0 0 20px rgba(0, 217, 255, 0.8);
+    transform: scale(1.05);
+}
+
+.nav-link {
+    color: #cbd5e0 !important;
+    font-weight: 500;
+    position: relative;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem !important;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--cyber-blue) !important;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--cyber-blue);
+    transform: translateX(-50%);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 80%;
+}
+
+/* Role Badges with Enhanced Styles */
 .role-admin {
-    background-color: #dc3545 !important;
+    background: linear-gradient(135deg, #dc3545, #c82333) !important;
     color: white !important;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
 }
 
 .role-manager {
-    background-color: #0dcaf0 !important;
+    background: linear-gradient(135deg, #0dcaf0, #0aa2c0) !important;
     color: #000 !important;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(13, 202, 240, 0.3);
 }
 
 .role-analyst {
-    background-color: #17a2b8 !important;
+    background: linear-gradient(135deg, #17a2b8, #138496) !important;
     color: white !important;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(23, 162, 184, 0.3);
 }
 
 .role-engineer {
-    background-color: #20c997 !important;
-    color: #000 !important;
+    background: linear-gradient(135deg, #20c997, #199d76) !important;
+    color: white !important;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(32, 201, 151, 0.3);
 }
 
 .role-responder {
-    background-color: #fd7e14 !important;
+    background: linear-gradient(135deg, #fd7e14, #e86e0a) !important;
     color: white !important;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(253, 126, 20, 0.3);
 }
 
 .role-hunter {
-    background-color: #6f42c1 !important;
+    background: linear-gradient(135deg, #6f42c1, #5a32a3) !important;
     color: white !important;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(111, 66, 193, 0.3);
+}
+
+/* ============================================
+   CARDS - 3D Hover Effects & Glowing Borders
+   ============================================ */
+.card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(30, 136, 229, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+    position: relative;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(30, 136, 229, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.card:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: var(--cyber-blue);
+    box-shadow: var(--shadow-glow), 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.card:hover::before {
+    left: 100%;
+}
+
+.chart-container {
+    background: var(--glass-bg);
+    border: 2px solid rgba(30, 136, 229, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.chart-container:hover {
+    border-color: var(--cyber-blue);
+    box-shadow: var(--shadow-glow);
+}
+
+/* ============================================
+   THREAT LEVEL INDICATOR
+   ============================================ */
+.threat-level-indicator {
+    background: linear-gradient(135deg, var(--navy-dark), var(--navy-medium));
+    border: 2px solid var(--cyber-blue);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-glow);
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.threat-level-indicator::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(0, 217, 255, 0.1), transparent);
+    animation: scan 3s infinite;
+}
+
+@keyframes scan {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.threat-gauge {
+    width: 100%;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.threat-gauge-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--alert-low), var(--alert-medium), var(--alert-high), var(--alert-critical));
+    border-radius: 10px;
+    transition: width 1s ease;
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+/* ============================================
+   TABLES - Enhanced Design
+   ============================================ */
+.table {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+#query-results thead,
+.table thead {
+    background: linear-gradient(135deg, var(--navy-dark), var(--navy-medium));
+    color: #fff;
+}
+
+.table thead th {
+    border: none;
+    padding: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.table tbody tr {
+    transition: all 0.3s ease;
+    border-bottom: 1px solid rgba(30, 136, 229, 0.1);
+}
+
+.table tbody tr:hover {
+    background: rgba(30, 136, 229, 0.05);
+    transform: scale(1.01);
+    box-shadow: 0 4px 12px rgba(30, 136, 229, 0.1);
+}
+
+/* ============================================
+   BUTTONS - Enhanced Styles
+   ============================================ */
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-blue), #1565c0) !important;
+    border: none !important;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(30, 136, 229, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(30, 136, 229, 0.4);
+}
+
+.btn-outline-light {
+    border: 2px solid var(--cyber-blue);
+    color: var(--cyber-blue);
+    transition: all 0.3s ease;
+}
+
+.btn-outline-light:hover {
+    background: var(--cyber-blue);
+    color: var(--navy-dark);
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+}
+
+/* ============================================
+   ALERTS - Styled Notifications
+   ============================================ */
+.alert {
+    border-left: 4px solid;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    animation: slideIn 0.5s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.alert-success {
+    background: rgba(16, 185, 129, 0.1);
+    border-left-color: var(--alert-low);
+}
+
+.alert-danger {
+    background: rgba(239, 68, 68, 0.1);
+    border-left-color: var(--alert-critical);
+}
+
+.alert-warning {
+    background: rgba(251, 191, 36, 0.1);
+    border-left-color: var(--alert-medium);
+}
+
+.alert-info {
+    background: rgba(30, 136, 229, 0.1);
+    border-left-color: var(--primary-blue);
+}
+
+/* ============================================
+   FORM INPUTS - Glowing Focus States
+   ============================================ */
+.form-control,
+.form-select {
+    border: 2px solid rgba(30, 136, 229, 0.2);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--cyber-blue);
+    box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+    background: white;
+}
+
+/* ============================================
+   HERO SECTION
+   ============================================ */
+.hero-section {
+    background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-medium) 50%, var(--primary-blue) 100%);
+    color: #fff;
+    padding: 4rem 0;
+    border-bottom: 3px solid var(--cyber-blue);
+    box-shadow: var(--shadow-glow);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(0,217,255,0.1)" stroke-width="0.5"/></svg>');
+    background-size: 100px 100px;
+    animation: heroPattern 20s linear infinite;
+    opacity: 0.3;
+}
+
+@keyframes heroPattern {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(100px); }
+}
+
+/* ============================================
+   LOADING SPINNER
+   ============================================ */
+.spinner-border {
+    border-color: var(--cyber-blue);
+    border-right-color: transparent;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+    
+    .card:hover {
+        transform: translateY(-4px) scale(1.01);
+    }
 }
