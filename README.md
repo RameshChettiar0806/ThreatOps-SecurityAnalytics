@@ -8,14 +8,14 @@
 
 ### Prerequisites
 - Python 3.8+
-- MySQL 5.7+ or 8.0+
+- MySQL 5.7+ or 8.0+ (for local development)
 - pip
 
 ### Setup Steps
 
 1. **Clone Repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/RameshChettiar0806/ThreatOps-SecurityAnalytics.git
    cd ThreatOps-SecurityAnalytics
    ```
 
@@ -36,14 +36,33 @@
    ```bash
    mysql -u root -p < threatops/schema.sql
    ```
-
-4. **Run Application**
-   ```bash
-   cd threatops
-   python app.py
+   
+   Configure your `.env` file:
+   ```env
+   DATABASE_URL=mysql+mysqlconnector://root:root@localhost:3306/threatops
+   SECRET_KEY=dev-secret-key-change-in-production
    ```
 
-**Access:** http://localhost:5000/login
+4. **Run Application** (Easy Mode! 🎯)
+   
+   **Option A - PowerShell:**
+   ```powershell
+   .\run.ps1
+   ```
+   
+   **Option B - Command Prompt:**
+   ```cmd
+   run.bat
+   ```
+   
+   **Option C - Manual:**
+   ```bash
+   venv\Scripts\activate
+   set PYTHONPATH=%CD%
+   python threatops\app.py
+   ```
+
+**Access:** http://127.0.0.1:5000
 
 ### Default Credentials
 
