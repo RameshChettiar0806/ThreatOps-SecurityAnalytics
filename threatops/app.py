@@ -43,10 +43,56 @@ def init_db():
     try:
         logger.info("Initializing database...")
         Base.metadata.create_all(bind=engine)
+        ensure_default_users()
         logger.info("Database initialized successfully")
     except Exception as e:
         logger.error(f"Database initialization failed: {e}")
         raise
+
+
+def ensure_default_users():
+    """Seed demo users used in README if they are missing."""
+    default_users = [
+        {
+            "username": "admin",
+            "password": "admin123",
+            "role": "Admin",
+            "email": "admin@threatops.local",
+        },
+        {
+            "username": "analyst",
+            "password": "analyst123",
+            "role": "Analyst",
+            "email": "analyst@threatops.local",
+        },
+    ]
+
+    db = SessionLocal()
+    try:
+        for user_data in default_users:
+            existing_user = db.query(User).filter(
+                func.lower(User.username) == user_data["username"].lower()
+            ).first()
+            if existing_user:
+                continue
+
+            db.add(
+                User(
+                    username=user_data["username"],
+                    password_hash=hash_password(user_data["password"]),
+                    role=user_data["role"],
+                    email=user_data["email"],
+                    is_active=True,
+                )
+            )
+
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        logger.error(f"Default user seeding failed: {e}")
+        raise
+    finally:
+        db.close()
 
 
 def hash_password(password):
@@ -168,7 +214,7 @@ def login():
     try:
         password_hash = hash_password(password)
         user = db.query(User).filter(
-            User.username == username,
+            func.lower(User.username) == username.lower(),
             User.password_hash == password_hash,
             User.is_active == True
         ).first()
