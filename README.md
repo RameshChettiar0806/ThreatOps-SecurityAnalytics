@@ -69,7 +69,7 @@
 | Username | Password | Role | Access |
 |----------|----------|------|--------|
 | admin | admin123 | Admin | Full access (DDL/DML/DQL/TCL/DCL) |
-| analyst | analyst123 | Analyst | SELECT only, CSV upload |
+| analyst | analyst123 | Analyst | SELECT only |
 
 ---
 
@@ -93,7 +93,6 @@ For complete documentation, see **[DOCS.md](DOCS.md)**
 - Advanced SQL (views, procedures, triggers)
 - Real-time threat correlation
 - Interactive analytics & visualizations
-- CSV log upload with transaction control
 - Session-based authentication
 - SQL injection prevention via ORM
 - Role-based route protection

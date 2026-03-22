@@ -52,7 +52,7 @@ python app.py
 |----------|----------|------|--------------|
 | **rajesh_kumar** | **ADM123** | Admin | Full system access, user management |
 | **deepak_verma** | **ADM123** | Admin | Full system access, user management |
-| **amit_patel** | **ANLST123** | Analyst | Read queries, CSV upload, alerts |
+| **amit_patel** | **ANLST123** | Analyst | Read queries, alerts |
 | **arjun_reddy** | **ENG123** | Engineer | System configuration, full queries |
 
 > ⚠️ **Security Note:** Change default passwords in production! See [User Management](#user-management) section.
@@ -66,7 +66,6 @@ python app.py
 - ✅ **MITRE Integration** - ATT&CK & D3FEND frameworks
 - ✅ **Auto-Correlation** - Stored procedures for threat mapping
 - ✅ **Advanced SQL** - Views, procedures, triggers, complex queries
-- ✅ **CSV Upload** - Batch import with transaction control
 - ✅ **Analytics Dashboard** - 5 complex queries with visualizations
 - ✅ **Alert Management** - Workflow with status tracking
 - ✅ **Audit Logging** - Complete activity trail
@@ -180,49 +179,10 @@ View threat intelligence with real-time statistics:
 SELECT * FROM THREAT_INTELLIGENCE_DASHBOARD LIMIT 100
 ```
 
-### 2. Upload CSV
-**URL:** `/upload`
-
-Upload security logs for automatic threat correlation.
-
-**Required CSV Headers:**
-- `timestamp` - Format: `YYYY-MM-DD HH:MM:SS`
-- `source_ip` - Source IP address
-- `destination_ip` - Destination IP
-- `protocol` - TCP/UDP/HTTP/HTTPS/etc.
-- `port` - Port number (1-65535)
-- `event_description` - Event details
-- `severity` - Low/Medium/High/Critical
-
-**Features:**
-- ✅ Transaction control (ROLLBACK on error)
-- ✅ Automatic threat correlation via stored procedure `CORRELATE_THREAT`
-- ✅ Alert generation via `GENERATE_ALERT`
-- ✅ Option to clear existing logs before upload
-- ✅ Audit logging via triggers
-
-**Example CSV:**
-```csv
-timestamp,source_ip,destination_ip,protocol,port,event_description,severity
-2026-02-15 10:30:00,192.168.1.100,10.0.0.50,SSH,22,Failed login attempts,High
-2026-02-15 11:00:00,172.16.0.88,192.168.1.1,TCP,8080,Port scanning detected,Medium
-```
-
-### 3. SQL Panel
+### 2. SQL Panel
 **URL:** `/sql_panel`
 
 Execute SQL queries with role-based validation.
-
-**Role Permissions:**
-
-| Role | Allowed SQL |
-|------|-------------|
-| **Admin** | All (SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, etc.) |
-| **Engineer** | All (SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, etc.) |
-| **Manager** | SELECT only |
-| **Analyst** | SELECT only |
-| **Responder** | SELECT only |
-| **Hunter** | SELECT only |
 
 **Example Queries:**
 ```sql
@@ -243,7 +203,7 @@ ORDER BY count DESC
 LIMIT 5;
 ```
 
-### 4. Analytics
+### 3. Analytics
 **URL:** `/analytics`
 
 5 pre-built complex SQL queries with visualizations:
@@ -254,7 +214,7 @@ LIMIT 5;
 4. **Mitigation Cost Analysis** - SUM, AVG, COUNT by category
 5. **Alert Status Distribution** - Multi-dimensional grouping
 
-### 5. Visualize
+### 4. Visualize
 **URL:** `/visualize`
 
 Create interactive charts:
@@ -262,7 +222,7 @@ Create interactive charts:
 - **Fields:** Severity, Protocol, Alert Type, Attack Technique
 - **Library:** Chart.js 4.4
 
-### 6. Alerts
+### 5. Alerts
 **URL:** `/alerts`
 
 Manage security alerts with workflow:
@@ -325,7 +285,7 @@ Body: { "user_id": 5, "is_active": false }
 **URL:** `/admin/audit_logs`
 
 View system activity trail:
-- User actions (LOGIN, LOGOUT, QUERY_EXECUTION, CSV_UPLOAD)
+- User actions (LOGIN, LOGOUT, QUERY_EXECUTION)
 - Timestamps and IP addresses
 - Success/Failure status
 - Detailed action descriptions
@@ -346,7 +306,7 @@ user_id, username, password_hash, role, email, created_at, last_login, is_active
 Security event data.
 ```sql
 log_id, timestamp, source_ip, destination_ip, protocol, port, 
-event_description, severity, uploaded_by, created_at
+event_description, severity, created_at
 ```
 
 #### 3. MITRE_ATTACK_TECHNIQUES
@@ -419,12 +379,9 @@ Create security alert from correlation.
 CALL GENERATE_ALERT(correlation_id, assigned_to);
 ```
 
-### Triggers (2)
+### Triggers (1)
 
-#### 1. AUDIT_CSV_UPLOAD
-Logs CSV uploads automatically.
-
-#### 2. AUDIT_ALERT_CREATION
+#### 1. AUDIT_ALERT_CREATION
 Logs alert creation automatically.
 
 ---
@@ -456,13 +413,6 @@ Login with username and password.
 Logout current user.
 
 ### Data Operations
-
-#### POST `/upload`
-Upload CSV file with logs.
-
-**Form Data:**
-- `file`: CSV file
-- `clear_existing`: "yes" to clear existing data
 
 #### POST `/run_query`
 Execute SQL query.
@@ -585,16 +535,7 @@ source venv/bin/activate
 pip install -r threatops/requirements.txt
 ```
 
-#### 5. CSV Upload Fails
-**Problem:** "Missing required headers" error.
-
-**Solution:**
-Ensure CSV has exact headers:
-```csv
-timestamp,source_ip,destination_ip,protocol,port,event_description,severity
-```
-
-#### 6. SQL Query Denied
+#### 5. SQL Query Denied
 **Problem:** "Unauthorized query type" as Analyst.
 
 **Solution:**
@@ -630,11 +571,10 @@ ThreatOps-SecurityAnalytics/
 ├── requirements.txt       # Python dependencies
 ├── .gitignore            # Git exclusions
 ├── threatops/
-│   ├── app.py            # Flask application (831 lines)
+│   ├── app.py            # Flask application
 │   ├── models.py         # SQLAlchemy ORM models
 │   ├── database.py       # Database configuration
 │   ├── schema.sql        # Complete SQL schema with data
-│   ├── sample_logs.csv   # Sample security logs
 │   ├── requirements.txt  # Local dependencies
 │   ├── static/
 │   │   ├── style.css     # Custom styles + role colors
@@ -647,7 +587,6 @@ ThreatOps-SecurityAnalytics/
 │       ├── analytics.html
 │       ├── visualize.html
 │       ├── alerts.html
-│       ├── upload.html
 │       ├── sql_panel.html
 │       ├── admin_users.html
 │       └── audit_logs.html

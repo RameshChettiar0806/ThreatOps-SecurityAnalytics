@@ -20,7 +20,6 @@
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('analytics') }}">Analytics</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('visualize') }}">Visualize</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('alerts') }}">Alerts</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('upload') }}">Upload CSV</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('sql_panel') }}">SQL Panel</a></li>
                     {% if session.role == 'Admin' %}
                     <li class="nav-item dropdown">
@@ -167,7 +166,7 @@
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="9" class="text-center">No logs available. Upload CSV data to get started.</td>
+                        <td colspan="9" class="text-center">No logs available. Check back later for data.</td>
                     </tr>
                     {% endfor %}
                 </tbody>

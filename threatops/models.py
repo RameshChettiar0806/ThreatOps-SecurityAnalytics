@@ -29,7 +29,6 @@ class User(Base):
     is_active = Column(Boolean, default=True)
 
     # Relationships
-    raw_logs = relationship("RawLog", back_populates="uploader")
     audit_logs = relationship("AuditLog", back_populates="user")
 
 
@@ -47,11 +46,9 @@ class RawLog(Base):
     port = Column(Integer, CheckConstraint('port IS NULL OR port BETWEEN 1 AND 65535'), nullable=True)
     event_description = Column(Text, nullable=False)
     severity = Column(Enum('Low', 'Medium', 'High', 'Critical'), nullable=False)
-    uploaded_by = Column(Integer, ForeignKey('users.user_id', ondelete='SET NULL'))
     created_at = Column(TIMESTAMP, server_default=func.current_timestamp())
 
     # Relationships
-    uploader = relationship("User", back_populates="raw_logs")
     correlations = relationship("ThreatCorrelation", back_populates="log", cascade="all, delete-orphan")
 
     # Indexes
@@ -150,7 +147,7 @@ class AuditLog(Base):
 
     audit_id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey('users.user_id', ondelete='SET NULL'))
-    action_type = Column(Enum('LOGIN', 'LOGOUT', 'QUERY_EXECUTION', 'CSV_UPLOAD', 
+    action_type = Column(Enum('LOGIN', 'LOGOUT', 'QUERY_EXECUTION', 
                               'ALERT_CREATION', 'USER_MANAGEMENT', 'DATA_MODIFICATION'), nullable=False)
     action_details = Column(Text)
     ip_address = Column(String(45))
