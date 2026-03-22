@@ -1,5 +1,26 @@
-timestamp,source_ip,destination_ip,protocol,port,event_description,severity
-2026-03-22 10:15:00,192.168.1.50,10.0.0.5,SSH,22,Multiple failed root logins from unknown IP,High
-2026-03-22 10:15:02,192.168.1.50,10.0.0.5,SSH,22,Multiple failed root logins from unknown IP,High
-2026-03-22 10:15:05,192.168.1.50,10.0.0.5,SSH,22,Multiple failed root logins from unknown IP,High
-2026-03-22 10:15:08,192.168.1.50,10.0.0.5,SSH,22,Successful root login after multiple failures,Critical
+Timestamp,Source IP,Dest IP,Protocol,Severity,Technique,Tactic,Countermeasure,Alert Status
+2026-03-22 10:15:00,192.168.1.50,10.0.0.5,SSH,High,Brute Force,Credential Access,Implement MFA,Active
+2026-03-22 10:15:02,192.168.1.50,10.0.0.5,SSH,High,Brute Force,Credential Access,Rate Limiting,Active
+2026-03-22 10:15:05,192.168.1.50,10.0.0.5,SSH,High,Brute Force,Credential Access,Password Policy,Active
+2026-03-22 10:15:08,192.168.1.50,10.0.0.5,SSH,Critical,Brute Force,Credential Access,Account Lockout,Escalated
+2026-03-22 10:15:12,192.168.1.50,10.0.0.5,SSH,High,Brute Force,Credential Access,Log Monitoring,Active
+2026-03-22 10:15:15,192.168.1.51,10.0.0.6,SSH,High,Brute Force,Credential Access,Implement MFA,Active
+2026-03-22 10:15:18,192.168.1.51,10.0.0.6,SSH,High,Brute Force,Credential Access,Rate Limiting,Active
+2026-03-22 10:15:22,192.168.1.51,10.0.0.6,SSH,High,Brute Force,Credential Access,Password Policy,Active
+2026-03-22 10:15:25,192.168.1.51,10.0.0.6,SSH,Critical,Brute Force,Credential Access,Account Lockout,Escalated
+2026-03-22 10:15:28,192.168.1.52,10.0.0.7,SSH,High,Brute Force,Credential Access,Log Monitoring,Active
+2026-03-22 10:15:32,192.168.1.52,10.0.0.7,SSH,High,Brute Force,Credential Access,Implement MFA,Active
+2026-03-22 10:15:35,192.168.1.52,10.0.0.7,SSH,High,Brute Force,Credential Access,Rate Limiting,Active
+2026-03-22 10:15:38,192.168.1.53,10.0.0.8,SSH,Medium,Brute Force,Credential Access,Password Policy,Resolved
+2026-03-22 10:15:42,192.168.1.53,10.0.0.8,SSH,High,Brute Force,Credential Access,Account Lockout,Active
+2026-03-22 10:15:45,192.168.1.53,10.0.0.8,SSH,High,Brute Force,Credential Access,Log Monitoring,Active
+2026-03-22 10:15:48,192.168.1.54,10.0.0.9,SSH,High,Brute Force,Credential Access,Implement MFA,Active
+2026-03-22 10:15:52,192.168.1.54,10.0.0.9,SSH,Critical,Brute Force,Credential Access,Rate Limiting,Escalated
+2026-03-22 10:15:55,192.168.1.54,10.0.0.9,SSH,High,Brute Force,Credential Access,Password Policy,Active
+2026-03-22 10:15:58,192.168.1.55,10.0.0.10,SSH,Medium,Brute Force,Credential Access,Account Lockout,Resolved
+2026-03-22 10:16:02,192.168.1.55,10.0.0.10,SSH,High,Brute Force,Credential Access,Log Monitoring,Active
+2026-03-22 10:16:05,192.168.1.56,10.0.0.11,SSH,High,Brute Force,Credential Access,Implement MFA,Active
+2026-03-22 10:16:08,192.168.1.56,10.0.0.11,SSH,High,Brute Force,Credential Access,Rate Limiting,Active
+2026-03-22 10:16:12,192.168.1.57,10.0.0.12,SSH,Critical,Brute Force,Credential Access,Password Policy,Escalated
+2026-03-22 10:16:15,192.168.1.57,10.0.0.12,SSH,High,Brute Force,Credential Access,Account Lockout,Active
+2026-03-22 10:16:18,192.168.1.58,10.0.0.13,SSH,Medium,Brute Force,Credential Access,Log Monitoring,Resolved
