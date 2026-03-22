@@ -2,7 +2,8 @@
 
 import os
 from pathlib import Path
-from sqlalchemy import create_engine, event
+from urllib.parse import parse_qs, urlparse
+from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy.pool import NullPool
 from dotenv import load_dotenv
@@ -18,12 +19,33 @@ DATABASE_URL = os.getenv(
     "mysql+mysqlconnector://root:root@localhost:3306/threatops",
 )
 
+# Normalize accidental whitespace from environment files.
+if DATABASE_URL:
+    DATABASE_URL = DATABASE_URL.strip()
+
 # Convert postgres:// to postgresql:// (some services use postgres://)
 if DATABASE_URL and DATABASE_URL.startswith('postgres://'):
     DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://', 1)
 
+
+def _is_postgres_url(url: str) -> bool:
+    """Return True for PostgreSQL URLs, including explicit driver schemes."""
+    if not url:
+        return False
+    parsed = urlparse(url)
+    return parsed.scheme.startswith('postgresql') or parsed.scheme == 'postgres'
+
+
 # Detect if using PostgreSQL or MySQL
-is_postgres = DATABASE_URL.startswith('postgresql://')
+is_postgres = _is_postgres_url(DATABASE_URL)
+
+
+def _postgres_query_has_sslmode(url: str) -> bool:
+    """Check whether sslmode is already present in the DATABASE_URL query string."""
+    if not url:
+        return False
+    query_params = parse_qs(urlparse(url).query)
+    return 'sslmode' in query_params
 
 # Engine configuration
 engine_config = {
@@ -38,8 +60,10 @@ is_serverless = os.getenv("VERCEL") is not None
 if is_postgres:
     engine_config["connect_args"] = {
         "connect_timeout": 10,
-        "sslmode": "require",  # Supabase requires SSL
     }
+    # Supabase requires SSL. Avoid passing duplicate sslmode if it already exists in URL.
+    if not _postgres_query_has_sslmode(DATABASE_URL):
+        engine_config["connect_args"]["sslmode"] = "require"
     # For serverless (Vercel), use NullPool - no connection pooling
     if is_serverless:
         engine_config["poolclass"] = NullPool
