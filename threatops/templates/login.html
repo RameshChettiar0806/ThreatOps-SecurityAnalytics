@@ -107,6 +107,7 @@
             position: relative;
             z-index: 10;
             width: 100%;
+            max-width: 1200px;
         }
 
         .login-card {
@@ -261,117 +262,122 @@
 
     <div class="container login-container">
         <div class="row justify-content-center">
-            <div class="col-md-10 col-lg-8">
+            <div class="col-12">
                 <div class="login-card">
                     <div class="login-header">
                         <h2>🛡️ ThreatOps SIEM</h2>
                         <p>Defensive Security Analytics Platform</p>
                     </div>
 
-                    <div class="card-body p-5">
-                        {% with messages = get_flashed_messages(with_categories=true) %}
-                            {% if messages %}
-                                {% for category, message in messages %}
-                                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                                        {{ message }}
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
-                        {% endwith %}
+                    <div class="row g-0">
+                        <!-- Left Side: Login Form -->
+                        <div class="col-lg-5 p-5 border-end border-info border-opacity-25" style="border-right-width: 2px !important;">
+                            {% with messages = get_flashed_messages(with_categories=true) %}
+                                {% if messages %}
+                                    {% for category, message in messages %}
+                                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                            {{ message }}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endwith %}
 
-                        <form method="POST" action="{{ url_for('login') }}">
-                            <div class="mb-4">
-                                <label for="username" class="form-label">🔐 Username</label>
-                                <input type="text" class="form-control" id="username" name="username" required autofocus placeholder="Enter your username" />
-                            </div>
-                            
-                            <div class="mb-4">
-                                <label for="password" class="form-label">🔑 Password</label>
-                                <input type="password" class="form-control" id="password" name="password" required placeholder="Enter your password" />
-                            </div>
-                            
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary btn-lg login-btn">Secure Login</button>
-                            </div>
-                        </form>
+                            <h4 class="mb-4 text-center" style="color: #1a2332; font-weight: 700;">Account Login</h4>
 
-                        <!-- SOC/CIRT Team Users Table -->
-                        <div class="mt-4">
-                            <div class="users-card">
+                            <form method="POST" action="{{ url_for('login') }}">
+                                <div class="mb-4">
+                                    <label for="username" class="form-label">🔐 Username</label>
+                                    <input type="text" class="form-control" id="username" name="username" required autofocus placeholder="Enter your username" />
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="password" class="form-label">🔑 Password</label>
+                                    <input type="password" class="form-control" id="password" name="password" required placeholder="Enter your password" />
+                                </div>
+                                
+                                <div class="d-grid mt-5">
+                                    <button type="submit" class="btn btn-primary btn-lg login-btn text-white">Secure Login</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Right Side: SOC/CIRT Team Users Table -->
+                        <div class="col-lg-7 p-5 bg-light bg-opacity-50">
+                            <div class="users-card h-100">
                                 <div class="card-header text-white">
                                     <h6 class="mb-0">👥 SOC/CIRT Team Access <small class="opacity-75">(Click to auto-fill)</small></h6>
                                 </div>
                                 <div class="card-body p-0">
-                                    <div class="table-responsive" style="max-height: 320px; overflow-y: auto;">
+                                    <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
                                         <table class="table table-sm table-hover mb-0">
                                             <thead class="table-light sticky-top">
                                                 <tr>
+                                                    <th>Name</th>
                                                     <th>Username</th>
                                                     <th>Role</th>
-                                                    <th>Password</th>
                                                 </tr>
                                             </thead>
                                             <tbody id="userTable">
-                                                <tr class="user-row" style="cursor: pointer;" data-username="rajesh_kumar" data-password="ADM123" onclick="fillCredentials('rajesh_kumar', 'ADM123')">
-                                                    <td><small><strong>rajesh_kumar</strong></small></td>
+                                                <tr class="user-row" data-username="rajeshKumar" data-password="ADM123" onclick="fillCredentials('rajeshKumar', 'ADM123')">
+                                                    <td><small>Rajesh Kumar</small></td>
+                                                    <td><small><strong>rajeshKumar</strong></small></td>
                                                     <td><span class="badge bg-danger">Admin</span></td>
-                                                    <td><small><code>ADM123</code></small></td>
                                                 </tr>
-                                                <tr class="user-row" style="cursor: pointer;" data-username="deepak_verma" data-password="ADM123" onclick="fillCredentials('deepak_verma', 'ADM123')">
-                                                    <td><small><strong>deepak_verma</strong></small></td>
+                                                <tr class="user-row" data-username="deepakVerma" data-password="ADM123" onclick="fillCredentials('deepakVerma', 'ADM123')">
+                                                    <td><small>Deepak Verma</small></td>
+                                                    <td><small><strong>deepakVerma</strong></small></td>
                                                     <td><span class="badge bg-danger">Admin</span></td>
-                                                    <td><small><code>ADM123</code></small></td>
                                                 </tr>
-                                                <tr class="user-row" style="cursor: pointer;" data-username="priya_sharma" data-password="MGR123" onclick="fillCredentials('priya_sharma', 'MGR123')">
-                                                    <td><small><strong>priya_sharma</strong></small></td>
+                                                <tr class="user-row" data-username="priyaSharma" data-password="MGR123" onclick="fillCredentials('priyaSharma', 'MGR123')">
+                                                    <td><small>Priya Sharma</small></td>
+                                                    <td><small><strong>priyaSharma</strong></small></td>
                                                     <td><span class="badge bg-success">Manager</span></td>
-                                                    <td><small><code>MGR123</code></small></td>
                                                 </tr>
-                                                <tr class="user-row" style="cursor: pointer;" data-username="amit_patel" data-password="ANLST123" onclick="fillCredentials('amit_patel', 'ANLST123')">
-                                                    <td><small><strong>amit_patel</strong></small></td>
+                                                <tr class="user-row" data-username="amitPatel" data-password="ANLST123" onclick="fillCredentials('amitPatel', 'ANLST123')">
+                                                    <td><small>Amit Patel</small></td>
+                                                    <td><small><strong>amitPatel</strong></small></td>
                                                     <td><span class="badge bg-info">Analyst</span></td>
-                                                    <td><small><code>ANLST123</code></small></td>
                                                 </tr>
-                                                <tr class="user-row" style="cursor: pointer;" data-username="sneha_singh" data-password="ANLST123" onclick="fillCredentials('sneha_singh', 'ANLST123')">
-                                                    <td><small><strong>sneha_singh</strong></small></td>
+                                                <tr class="user-row" data-username="snehaSingh" data-password="ANLST123" onclick="fillCredentials('snehaSingh', 'ANLST123')">
+                                                    <td><small>Sneha Singh</small></td>
+                                                    <td><small><strong>snehaSingh</strong></small></td>
                                                     <td><span class="badge bg-info">Analyst</span></td>
-                                                    <td><small><code>ANLST123</code></small></td>
                                                 </tr>
-                                                <tr class="user-row" style="cursor: pointer;" data-username="rohan_gupta" data-password="ANLST123" onclick="fillCredentials('rohan_gupta', 'ANLST123')">
-                                                    <td><small><strong>rohan_gupta</strong></small></td>
+                                                <tr class="user-row" data-username="rohanGupta" data-password="ANLST123" onclick="fillCredentials('rohanGupta', 'ANLST123')">
+                                                    <td><small>Rohan Gupta</small></td>
+                                                    <td><small><strong>rohanGupta</strong></small></td>
                                                     <td><span class="badge bg-info">Analyst</span></td>
-                                                    <td><small><code>ANLST123</code></small></td>
                                                 </tr>
-                                                <tr class="user-row" style="cursor: pointer;" data-username="meera_krishnan" data-password="ANLST123" onclick="fillCredentials('meera_krishnan', 'ANLST123')">
-                                                    <td><small><strong>meera_krishnan</strong></small></td>
+                                                <tr class="user-row" data-username="meeraKrishnan" data-password="ANLST123" onclick="fillCredentials('meeraKrishnan', 'ANLST123')">
+                                                    <td><small>Meera Krishnan</small></td>
+                                                    <td><small><strong>meeraKrishnan</strong></small></td>
                                                     <td><span class="badge bg-info">Analyst</span></td>
-                                                    <td><small><code>ANLST123</code></small></td>
                                                 </tr>
-                                                <tr class="user-row" style="cursor: pointer;" data-username="arjun_reddy" data-password="ENG123" onclick="fillCredentials('arjun_reddy', 'ENG123')">
-                                                    <td><small><strong>arjun_reddy</strong></small></td>
+                                                <tr class="user-row" data-username="arjunReddy" data-password="ENG123" onclick="fillCredentials('arjunReddy', 'ENG123')">
+                                                    <td><small>Arjun Reddy</small></td>
+                                                    <td><small><strong>arjunReddy</strong></small></td>
                                                     <td><span class="badge bg-primary">Engineer</span></td>
-                                                    <td><small><code>ENG123</code></small></td>
                                                 </tr>
-                                                <tr class="user-row" style="cursor: pointer;" data-username="vikram_desai" data-password="ENG123" onclick="fillCredentials('vikram_desai', 'ENG123')">
-                                                    <td><small><strong>vikram_desai</strong></small></td>
+                                                <tr class="user-row" data-username="vikramDesai" data-password="ENG123" onclick="fillCredentials('vikramDesai', 'ENG123')">
+                                                    <td><small>Vikram Desai</small></td>
+                                                    <td><small><strong>vikramDesai</strong></small></td>
                                                     <td><span class="badge bg-primary">Engineer</span></td>
-                                                    <td><small><code>ENG123</code></small></td>
                                                 </tr>
-                                                <tr class="user-row" style="cursor: pointer;" data-username="kavya_iyer" data-password="RESP123" onclick="fillCredentials('kavya_iyer', 'RESP123')">
-                                                    <td><small><strong>kavya_iyer</strong></small></td>
+                                                <tr class="user-row" data-username="kavyaIyer" data-password="RESP123" onclick="fillCredentials('kavyaIyer', 'RESP123')">
+                                                    <td><small>Kavya Iyer</small></td>
+                                                    <td><small><strong>kavyaIyer</strong></small></td>
                                                     <td><span class="badge bg-warning text-dark">Responder</span></td>
-                                                    <td><small><code>RESP123</code></small></td>
                                                 </tr>
-                                                <tr class="user-row" style="cursor: pointer;" data-username="sanjay_rao" data-password="RESP123" onclick="fillCredentials('sanjay_rao', 'RESP123')">
-                                                    <td><small><strong>sanjay_rao</strong></small></td>
+                                                <tr class="user-row" data-username="sanjayRao" data-password="RESP123" onclick="fillCredentials('sanjayRao', 'RESP123')">
+                                                    <td><small>Sanjay Rao</small></td>
+                                                    <td><small><strong>sanjayRao</strong></small></td>
                                                     <td><span class="badge bg-warning text-dark">Responder</span></td>
-                                                    <td><small><code>RESP123</code></small></td>
                                                 </tr>
-                                                <tr class="user-row" style="cursor: pointer;" data-username="ananya_nair" data-password="HUNT123" onclick="fillCredentials('ananya_nair', 'HUNT123')">
-                                                    <td><small><strong>ananya_nair</strong></small></td>
+                                                <tr class="user-row" data-username="ananyaNair" data-password="HUNT123" onclick="fillCredentials('ananyaNair', 'HUNT123')">
+                                                    <td><small>Ananya Nair</small></td>
+                                                    <td><small><strong>ananyaNair</strong></small></td>
                                                     <td><span class="badge bg-dark">Hunter</span></td>
-                                                    <td><small><code>HUNT123</code></small></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -432,6 +438,9 @@
             
             // Scroll to top smoothly
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Focus submit button
+            document.querySelector('.login-btn').focus();
         }
         
         // Initialize particles on page load

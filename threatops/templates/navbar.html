@@ -25,7 +25,7 @@
                 {% endif %}
             </ul>
             <span class="navbar-text me-3">
-                <span class=\"badge role-{{ session.role.lower() if session.role else 'analyst' }}\">{{ session.role }}</span>
+                <span class="badge role-{{ session.role.lower() if session.role else 'analyst' }}">{{ session.role }}</span>
                 {{ session.username }}
             </span>
             <a class="btn btn-outline-light btn-sm" href="{{ url_for('logout') }}">Logout</a>

@@ -138,40 +138,70 @@ const renderQueryResults = (columns, rows) => {
 
 const buildChartConfig = (chartType, labels, dataPoints) => {
     const isPieOrDoughnut = (chartType === 'pie' || chartType === 'doughnut');
+    const isLine = (chartType === 'line');
     
+    const colorPalette = [
+        "#0d6efd",
+        "#6610f2",
+        "#198754",
+        "#dc3545",
+        "#ffc107",
+        "#20c997",
+        "#6f42c1",
+        "#fd7e14",
+        "#17a2b8",
+        "#e83e8c",
+        "#6c757d",
+        "#343a40",
+    ];
+
+    // Truncate helper for long labels
+    const truncate = (str, maxLen) => str.length > maxLen ? str.substring(0, maxLen) + '…' : str;
+
+    const dataset = {
+        label: "Count",
+        data: dataPoints,
+    };
+
+    if (isLine) {
+        dataset.borderColor = "#0d6efd";
+        dataset.backgroundColor = "rgba(13, 110, 253, 0.15)";
+        dataset.borderWidth = 3;
+        dataset.fill = true;
+        dataset.tension = 0.3;
+        dataset.pointBackgroundColor = "#0d6efd";
+        dataset.pointRadius = 5;
+        dataset.pointHoverRadius = 7;
+    } else {
+        dataset.backgroundColor = colorPalette;
+        dataset.borderWidth = 2;
+        dataset.borderColor = isPieOrDoughnut ? '#fff' : colorPalette;
+    }
+
+    const total = dataPoints.reduce((a, b) => a + b, 0);
+
     const baseConfig = {
         type: chartType === "stackedBar" ? "bar" : chartType,
         data: {
             labels,
-            datasets: [
-                {
-                    label: "Log Count",
-                    data: dataPoints,
-                    backgroundColor: [
-                        "#0d6efd",
-                        "#6610f2",
-                        "#198754",
-                        "#dc3545",
-                        "#ffc107",
-                        "#20c997",
-                        "#6f42c1",
-                        "#fd7e14",
-                        "#17a2b8",
-                    ],
-                    borderWidth: 2,
-                    borderColor: '#fff'
-                },
-            ],
+            datasets: [dataset],
         },
         options: {
             responsive: true,
             maintainAspectRatio: true,
-            aspectRatio: isPieOrDoughnut ? 1.5 : 2,
+            aspectRatio: isPieOrDoughnut ? 1.2 : 2,
+            layout: {
+                padding: {
+                    bottom: 10
+                }
+            },
             plugins: {
                 legend: {
-                    position: isPieOrDoughnut ? "right" : "bottom",
+                    display: isPieOrDoughnut,
+                    position: "bottom",
                     labels: {
-                        padding: 15,
+                        padding: 12,
+                        boxWidth: 14,
                         font: {
                             size: 12
                         },
@@ -180,11 +210,12 @@ const buildChartConfig = (chartType, labels, dataPoints) => {
                             if (data.labels.length && data.datasets.length) {
                                 return data.labels.map((label, i) => {
                                     const value = data.datasets[0].data[i];
-                                    const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
                                     const percentage = ((value / total) * 100).toFixed(1);
                                     return {
-                                        text: `${label}: ${value} (${percentage}%)`,
-                                        fillStyle: data.datasets[0].backgroundColor[i],
+                                        text: `${truncate(label, 25)}: ${value} (${percentage}%)`,
+                                        fillStyle: data.datasets[0].backgroundColor[i % colorPalette.length],
+                                        strokeStyle: '#fff',
+                                        lineWidth: 1,
                                         hidden: false,
                                         index: i
                                     };
@@ -196,12 +227,18 @@ const buildChartConfig = (chartType, labels, dataPoints) => {
                 },
                 tooltip: {
                     callbacks: {
+                        title: function(items) {
+                            // Show full label name (untruncated) in tooltip title
+                            if (items.length > 0) {
+                                const idx = items[0].dataIndex;
+                                return items[0].chart.data.labels[idx];
+                            }
+                            return '';
+                        },
                         label: function(context) {
-                            const label = context.label || '';
-                            const value = context.parsed.y || context.parsed || 0;
-                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const value = context.parsed.y !== undefined ? context.parsed.y : context.parsed;
                             const percentage = ((value / total) * 100).toFixed(1);
-                            return `${label}: ${value} (${percentage}%)`;
+                            return ` Count: ${value}  (${percentage}%)`;
                         }
                     }
                 }
@@ -209,14 +246,30 @@ const buildChartConfig = (chartType, labels, dataPoints) => {
         },
     };
 
+    // Scales for bar and line charts
     if (chartType === "stackedBar") {
         baseConfig.options.scales = {
-            x: { stacked: true },
+            x: { stacked: true, ticks: { maxRotation: 45, minRotation: 0, autoSkip: false, font: { size: 11 } } },
             y: { stacked: true, beginAtZero: true },
         };
     } else if (!isPieOrDoughnut) {
         baseConfig.options.scales = {
-            y: { beginAtZero: true }
+            x: {
+                ticks: {
+                    maxRotation: 45,
+                    minRotation: 0,
+                    autoSkip: false,
+                    font: { size: 11 },
+                    callback: function(value) {
+                        const label = this.getLabelForValue(value);
+                        return truncate(label, 20);
+                    }
+                }
+            },
+            y: { 
+                beginAtZero: true,
+                ticks: { font: { size: 12 } }
+            }
         };
     }
 
@@ -227,6 +280,16 @@ if (generateChartButton) {
     generateChartButton.addEventListener("click", async () => {
         const field = chartFieldSelect.value;
         const chartType = chartTypeSelect.value;
+
+        // Toggle container width based on chart type
+        const chartContainer = document.querySelector('.chart-container');
+        if (chartContainer) {
+            if (chartType === 'pie' || chartType === 'doughnut') {
+                chartContainer.classList.remove('chart-wide');
+            } else {
+                chartContainer.classList.add('chart-wide');
+            }
+        }
 
         try {
             const response = await fetch(`/chart_data?field=${field}`);

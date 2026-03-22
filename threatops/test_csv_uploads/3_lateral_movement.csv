@@ -1,0 +1,5 @@
+timestamp,source_ip,destination_ip,protocol,port,event_description,severity
+2026-03-22 14:20:00,10.0.0.15,10.0.0.100,SMB,445,Unexpected administrative share access,High
+2026-03-22 14:21:00,10.0.0.15,10.0.0.101,SMB,445,Unexpected administrative share access,High
+2026-03-22 14:22:00,10.0.0.15,10.0.0.200,RDP,3389,Unauthorized remote desktop connection attempt,Critical
+2026-03-22 14:25:00,10.0.0.200,10.0.0.250,WMI,135,Remote process execution via WMI,Critical

@@ -44,19 +44,51 @@
                             <div class="col-md-6">
                                 <h6 class="text-success mt-3">✅ Allowed Operations (Full Access):</h6>
                                 <ul class="list-group list-group-flush">
-                                    <li class="list-group-item"><strong>DQL (Data Query Language):</strong> SELECT</li>
-                                    <li class="list-group-item"><strong>DML (Data Manipulation):</strong> INSERT, UPDATE, DELETE</li>
-                                    <li class="list-group-item"><strong>DDL (Data Definition):</strong> CREATE, ALTER, DROP, TRUNCATE</li>
-                                    <li class="list-group-item"><strong>DCL (Data Control):</strong> GRANT, REVOKE</li>
-                                    <li class="list-group-item"><strong>TCL (Transaction Control):</strong> COMMIT, ROLLBACK, SAVEPOINT</li>
+                                    <li class="list-group-item">
+                                        <strong>DQL (Data Query Language):</strong> SELECT
+                                        <ul class="mt-1 small">
+                                            <li>Aggregate Functions — COUNT, AVG, SUM, MIN, MAX with GROUP BY, HAVING</li>
+                                            <li>Set Operations — UNION, INTERSECT (via IN), EXCEPT (via NOT IN)</li>
+                                            <li>Subqueries — Scalar, Correlated, Nested</li>
+                                            <li>Joins — INNER JOIN, LEFT JOIN, CROSS JOIN</li>
+                                        </ul>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>DML (Data Manipulation):</strong> INSERT, UPDATE, DELETE
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>DDL (Data Definition):</strong> CREATE, ALTER, DROP, TRUNCATE
+                                        <ul class="mt-1 small">
+                                            <li>Constraints — PRIMARY KEY, FOREIGN KEY, CHECK, UNIQUE, NOT NULL</li>
+                                            <li>Views — CREATE VIEW, DROP VIEW</li>
+                                        </ul>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>DCL (Data Control):</strong> GRANT, REVOKE
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>TCL (Transaction Control):</strong> COMMIT, ROLLBACK, SAVEPOINT
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>Procedural SQL:</strong>
+                                        <ul class="mt-1 small">
+                                            <li>Stored Procedures — CALL, CREATE PROCEDURE</li>
+                                            <li>User-Defined Functions — CREATE FUNCTION</li>
+                                            <li>Triggers — BEFORE/AFTER INSERT, UPDATE, DELETE</li>
+                                            <li>Cursors — Cursor-based row processing</li>
+                                        </ul>
+                                    </li>
                                 </ul>
                             </div>
                             <div class="col-md-6">
                                 <h6 class="text-primary mt-3">🎯 Admin Responsibilities:</h6>
                                 <ul>
-                                    <li><strong>Database Management:</strong> Create/modify schemas and tables</li>
+                                    <li><strong>Database Management:</strong> Create/modify schemas, tables, views & constraints</li>
                                     <li><strong>User Administration:</strong> Grant/revoke permissions, manage analyst accounts</li>
-                                    <li><strong>Data Governance:</strong> Modify critical security data, manage MITRE frameworks</li>
+                                    <li><strong>Data Governance:</strong> Maintain referential integrity, manage MITRE frameworks</li>
+                                    <li><strong>Query & Analytics:</strong> Complex joins, aggregations, subqueries for threat analysis</li>
+                                    <li><strong>Automation:</strong> Manage stored procedures, functions, triggers & cursors</li>
+                                    <li><strong>Transaction Control:</strong> Manage commits, rollbacks & savepoints for data safety</li>
                                     <li><strong>System Maintenance:</strong> Backup operations, schema updates, index optimization</li>
                                     <li><strong>Audit & Compliance:</strong> Review all system activities, investigate incidents</li>
                                 </ul>
@@ -69,19 +101,19 @@
                         
                         {% elif session.role == 'Engineer' %}
                         <h6 class="text-primary"><strong>Security Engineer Privileges</strong></h6>
-                        <p>As a <strong>Security Engineer</strong>, you have full database access for system configuration and maintenance:</p>
+                        <p>As a <strong>Security Engineer</strong>, you have elevated database access for system configuration and maintenance:</p>
                         
                         <div class="row">
                             <div class="col-md-6">
                                 <h6 class="text-success mt-3">✅ Allowed Operations:</h6>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
-                                        <strong>DQL (Data Query Language):</strong>
-                                        <ul class="mt-2">
-                                            <li>SELECT queries with JOINs, GROUP BY, HAVING</li>
-                                            <li>Aggregate functions (COUNT, SUM, AVG, MAX, MIN)</li>
-                                            <li>Nested subqueries and correlation</li>
-                                            <li>View queries (THREAT_INTELLIGENCE_DASHBOARD, USER_ACTIVITY_SUMMARY)</li>
+                                        <strong>DQL (Data Query Language):</strong> SELECT
+                                        <ul class="mt-1 small">
+                                            <li>Aggregate Functions — COUNT, AVG, SUM, MIN, MAX with GROUP BY, HAVING</li>
+                                            <li>Set Operations — UNION, INTERSECT (via IN), EXCEPT (via NOT IN)</li>
+                                            <li>Subqueries — Scalar, Correlated, Nested</li>
+                                            <li>Joins — INNER JOIN, LEFT JOIN, CROSS JOIN</li>
                                         </ul>
                                     </li>
                                     <li class="list-group-item">
@@ -90,7 +122,19 @@
                                     </li>
                                     <li class="list-group-item">
                                         <strong>DDL (Data Definition):</strong> CREATE, ALTER, DROP, TRUNCATE
-                                        <br><small>For schema updates and system configuration</small>
+                                        <ul class="mt-1 small">
+                                            <li>Constraints — PRIMARY KEY, FOREIGN KEY, CHECK, UNIQUE, NOT NULL</li>
+                                            <li>Views — CREATE VIEW, DROP VIEW</li>
+                                        </ul>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>Procedural SQL:</strong>
+                                        <ul class="mt-1 small">
+                                            <li>Stored Procedures — CALL, CREATE PROCEDURE</li>
+                                            <li>User-Defined Functions — CREATE FUNCTION</li>
+                                            <li>Triggers — BEFORE/AFTER INSERT, UPDATE, DELETE</li>
+                                            <li>Cursors — Cursor-based row processing</li>
+                                        </ul>
                                     </li>
                                 </ul>
                             </div>
@@ -98,45 +142,58 @@
                             <div class="col-md-6">
                                 <h6 class="text-primary mt-3">🎯 Engineer Capabilities:</h6>
                                 <ul>
-                                    <li><strong>System Configuration:</strong> Modify database schemas and structures</li>
+                                    <li><strong>System Configuration:</strong> Modify database schemas, tables & constraints</li>
                                     <li><strong>Data Management:</strong> Insert, update, and delete security logs</li>
-                                    <li><strong>Maintenance:</strong> Optimize tables and manage system performance</li>
-                                    <li><strong>Threat Analysis:</strong> Query logs, correlations, and MITRE mappings</li>
+                                    <li><strong>Automation:</strong> Create and manage procedures, functions, triggers & cursors</li>
+                                    <li><strong>Threat Analysis:</strong> Complex joins, aggregations & subqueries on threat data</li>
+                                    <li><strong>Maintenance:</strong> Optimize tables, manage views and system performance</li>
+                                </ul>
+
+                                <h6 class="text-danger mt-3">❌ Restricted Operations:</h6>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item text-danger">
+                                        <strong>DCL (Data Control):</strong> GRANT, REVOKE
+                                        <br><small>Reason: User privilege management is Admin-only</small>
+                                    </li>
+                                    <li class="list-group-item text-danger">
+                                        <strong>TCL (Transaction Control):</strong> COMMIT, ROLLBACK, SAVEPOINT
+                                        <br><small>Reason: Transaction management requires Admin oversight</small>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
                         
                         <div class="alert alert-info mt-3 mb-0">
-                            <strong>💡 Access Control Policy:</strong> All queries are logged for audit compliance. Full database access enables system configuration and maintenance while maintaining security best practices.
+                            <strong>💡 Access Control Policy:</strong> All queries are logged for audit compliance. Elevated access enables system configuration and maintenance while DCL/TCL operations remain under Admin control.
                         </div>
                         
-                        {% else %}
-                        <h6 class="text-info"><strong>{{ session.role }} Privileges</strong></h6>
-                        <p>As a <strong>{{ session.role }}</strong>, your access is restricted to read-only operations to maintain data integrity:</p>
+                        {% elif session.role == 'Manager' %}
+                        <h6 class="text-success"><strong>SOC Manager Privileges</strong></h6>
+                        <p>As a <strong>Manager</strong>, you have read-only access for oversight, reporting and team performance monitoring:</p>
                         
                         <div class="row">
                             <div class="col-md-6">
                                 <h6 class="text-success mt-3">✅ Allowed Operations:</h6>
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
-                                        <strong>DQL (Data Query Language):</strong>
-                                        <ul class="mt-2">
-                                            <li>SELECT queries with JOINs, GROUP BY, HAVING</li>
-                                            <li>Aggregate functions (COUNT, SUM, AVG, MAX, MIN)</li>
-                                            <li>Nested subqueries and correlation</li>
-                                            <li>View queries (THREAT_INTELLIGENCE_DASHBOARD, USER_ACTIVITY_SUMMARY)</li>
+                                        <strong>DQL (Data Query Language):</strong> SELECT
+                                        <ul class="mt-1 small">
+                                            <li>Aggregate Functions — COUNT, AVG, SUM, MIN, MAX with GROUP BY, HAVING</li>
+                                            <li>Set Operations — UNION, INTERSECT (via IN), EXCEPT (via NOT IN)</li>
+                                            <li>Subqueries — Scalar, Correlated, Nested</li>
+                                            <li>Joins — INNER JOIN, LEFT JOIN, CROSS JOIN</li>
+                                            <li>Views — Query all dashboard and summary views</li>
                                         </ul>
                                     </li>
                                 </ul>
-                                
-                                <h6 class="text-primary mt-3">🎯 {{ session.role }} Capabilities:</h6>
+
+                                <h6 class="text-primary mt-3">🎯 Manager Capabilities:</h6>
                                 <ul>
-                                    <li><strong>Threat Analysis:</strong> Query logs, correlations, and MITRE mappings</li>
-                                    <li><strong>Alert Investigation:</strong> View security alerts and incident details</li>
-                                    <li><strong>Reporting:</strong> Generate security statistics and trend analysis</li>
-                                    {% if session.role in ['Analyst', 'Responder', 'Hunter'] %}
-                                    <li><strong>CSV Upload:</strong> Ingest new security logs (via Upload page)</li>
-                                    {% endif %}
+                                    <li><strong>Team Oversight:</strong> Monitor analyst performance and workload distribution</li>
+                                    <li><strong>Threat Reporting:</strong> Generate aggregate threat statistics and trend analysis</li>
+                                    <li><strong>Alert Monitoring:</strong> Review alert status, severity distribution & resolution rates</li>
+                                    <li><strong>Audit Review:</strong> Access audit logs for compliance and incident investigation</li>
+                                    <li><strong>MITRE Analysis:</strong> Query ATT&CK techniques and D3FEND countermeasure coverage</li>
                                 </ul>
                             </div>
                             
@@ -145,7 +202,7 @@
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item text-danger">
                                         <strong>DML (Data Manipulation):</strong> INSERT, UPDATE, DELETE
-                                        <br><small>Reason: Prevents accidental or malicious data modification</small>
+                                        <br><small>Reason: Prevents accidental or unauthorized data modification</small>
                                     </li>
                                     <li class="list-group-item text-danger">
                                         <strong>DDL (Data Definition):</strong> CREATE, ALTER, DROP, TRUNCATE
@@ -157,15 +214,203 @@
                                     </li>
                                     <li class="list-group-item text-danger">
                                         <strong>TCL (Transaction Control):</strong> COMMIT, ROLLBACK, SAVEPOINT
-                                        <br><small>Reason: Transaction management requires admin oversight</small>
+                                        <br><small>Reason: Transaction management requires Admin oversight</small>
+                                    </li>
+                                    <li class="list-group-item text-danger">
+                                        <strong>Procedural SQL:</strong> Procedures, Functions, Triggers, Cursors
+                                        <br><small>Reason: Database automation objects are managed by Admin/Engineer</small>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                         
                         <div class="alert alert-info mt-3 mb-0">
-                            <strong>💡 Access Control Policy:</strong> All queries are logged for audit compliance. Read-only access protects data integrity and maintains security best practices while enabling comprehensive threat analysis and reporting.
+                            <strong>💡 Access Control Policy:</strong> Read-only access enables comprehensive oversight and reporting while protecting data integrity. All queries are logged for audit compliance.
                         </div>
+                        
+                        {% elif session.role == 'Analyst' %}
+                        <h6 class="text-info"><strong>Security Analyst Privileges</strong></h6>
+                        <p>As an <strong>Analyst</strong>, you have read-only access for threat investigation, log analysis and security monitoring:</p>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-success mt-3">✅ Allowed Operations:</h6>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <strong>DQL (Data Query Language):</strong> SELECT
+                                        <ul class="mt-1 small">
+                                            <li>Aggregate Functions — COUNT, AVG, SUM, MIN, MAX with GROUP BY, HAVING</li>
+                                            <li>Set Operations — UNION, INTERSECT (via IN), EXCEPT (via NOT IN)</li>
+                                            <li>Subqueries — Scalar, Correlated, Nested</li>
+                                            <li>Joins — INNER JOIN, LEFT JOIN, CROSS JOIN</li>
+                                            <li>Views — Query threat dashboard and activity summary views</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                                <h6 class="text-primary mt-3">🎯 Analyst Capabilities:</h6>
+                                <ul>
+                                    <li><strong>Threat Investigation:</strong> Query raw logs, correlations and MITRE ATT&CK mappings</li>
+                                    <li><strong>Alert Analysis:</strong> Investigate security alerts, severity patterns and incident details</li>
+                                    <li><strong>Log Correlation:</strong> Cross-reference logs with threat techniques using joins</li>
+                                    <li><strong>Statistical Analysis:</strong> Generate aggregated security metrics and trend reports</li>
+                                    <li><strong>CSV Upload:</strong> Ingest new security logs (via Upload page)</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <h6 class="text-danger mt-3">❌ Restricted Operations:</h6>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item text-danger">
+                                        <strong>DML (Data Manipulation):</strong> INSERT, UPDATE, DELETE
+                                        <br><small>Reason: Prevents accidental or unauthorized data modification</small>
+                                    </li>
+                                    <li class="list-group-item text-danger">
+                                        <strong>DDL (Data Definition):</strong> CREATE, ALTER, DROP, TRUNCATE
+                                        <br><small>Reason: Protects database schema integrity</small>
+                                    </li>
+                                    <li class="list-group-item text-danger">
+                                        <strong>DCL (Data Control):</strong> GRANT, REVOKE
+                                        <br><small>Reason: Prevents privilege escalation</small>
+                                    </li>
+                                    <li class="list-group-item text-danger">
+                                        <strong>TCL (Transaction Control):</strong> COMMIT, ROLLBACK, SAVEPOINT
+                                        <br><small>Reason: Transaction management requires Admin oversight</small>
+                                    </li>
+                                    <li class="list-group-item text-danger">
+                                        <strong>Procedural SQL:</strong> Procedures, Functions, Triggers, Cursors
+                                        <br><small>Reason: Database automation objects are managed by Admin/Engineer</small>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info mt-3 mb-0">
+                            <strong>💡 Access Control Policy:</strong> Read-only access enables thorough threat investigation while protecting data integrity. All queries are logged for audit compliance.
+                        </div>
+                        
+                        {% elif session.role == 'Responder' %}
+                        <h6 class="text-warning"><strong>Incident Responder Privileges</strong></h6>
+                        <p>As a <strong>Responder</strong>, you have read-only access for incident response, alert triage and containment analysis:</p>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-success mt-3">✅ Allowed Operations:</h6>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <strong>DQL (Data Query Language):</strong> SELECT
+                                        <ul class="mt-1 small">
+                                            <li>Aggregate Functions — COUNT, AVG, SUM, MIN, MAX with GROUP BY, HAVING</li>
+                                            <li>Set Operations — UNION, INTERSECT (via IN), EXCEPT (via NOT IN)</li>
+                                            <li>Subqueries — Scalar, Correlated, Nested</li>
+                                            <li>Joins — INNER JOIN, LEFT JOIN, CROSS JOIN</li>
+                                            <li>Views — Query threat dashboard and activity summary views</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                                <h6 class="text-primary mt-3">🎯 Responder Capabilities:</h6>
+                                <ul>
+                                    <li><strong>Incident Triage:</strong> Query open alerts, severity levels and response priorities</li>
+                                    <li><strong>Containment Analysis:</strong> Investigate source IPs, protocols and attack vectors</li>
+                                    <li><strong>Countermeasure Review:</strong> Query D3FEND countermeasures and mitigation strategies</li>
+                                    <li><strong>Timeline Reconstruction:</strong> Correlate logs chronologically for incident timelines</li>
+                                    <li><strong>CSV Upload:</strong> Ingest new security logs (via Upload page)</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <h6 class="text-danger mt-3">❌ Restricted Operations:</h6>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item text-danger">
+                                        <strong>DML (Data Manipulation):</strong> INSERT, UPDATE, DELETE
+                                        <br><small>Reason: Prevents accidental or unauthorized data modification</small>
+                                    </li>
+                                    <li class="list-group-item text-danger">
+                                        <strong>DDL (Data Definition):</strong> CREATE, ALTER, DROP, TRUNCATE
+                                        <br><small>Reason: Protects database schema integrity</small>
+                                    </li>
+                                    <li class="list-group-item text-danger">
+                                        <strong>DCL (Data Control):</strong> GRANT, REVOKE
+                                        <br><small>Reason: Prevents privilege escalation</small>
+                                    </li>
+                                    <li class="list-group-item text-danger">
+                                        <strong>TCL (Transaction Control):</strong> COMMIT, ROLLBACK, SAVEPOINT
+                                        <br><small>Reason: Transaction management requires Admin oversight</small>
+                                    </li>
+                                    <li class="list-group-item text-danger">
+                                        <strong>Procedural SQL:</strong> Procedures, Functions, Triggers, Cursors
+                                        <br><small>Reason: Database automation objects are managed by Admin/Engineer</small>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info mt-3 mb-0">
+                            <strong>💡 Access Control Policy:</strong> Read-only access supports rapid incident response while maintaining data integrity. All queries are logged for audit compliance.
+                        </div>
+                        
+                        {% elif session.role == 'Hunter' %}
+                        <h6 class="text-dark"><strong>Threat Hunter Privileges</strong></h6>
+                        <p>As a <strong>Hunter</strong>, you have read-only access for proactive threat hunting, anomaly detection and intelligence gathering:</p>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-success mt-3">✅ Allowed Operations:</h6>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <strong>DQL (Data Query Language):</strong> SELECT
+                                        <ul class="mt-1 small">
+                                            <li>Aggregate Functions — COUNT, AVG, SUM, MIN, MAX with GROUP BY, HAVING</li>
+                                            <li>Set Operations — UNION, INTERSECT (via IN), EXCEPT (via NOT IN)</li>
+                                            <li>Subqueries — Scalar, Correlated, Nested</li>
+                                            <li>Joins — INNER JOIN, LEFT JOIN, CROSS JOIN</li>
+                                            <li>Views — Query threat dashboard and activity summary views</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                                <h6 class="text-primary mt-3">🎯 Hunter Capabilities:</h6>
+                                <ul>
+                                    <li><strong>Proactive Hunting:</strong> Query logs for hidden threats and anomalous patterns</li>
+                                    <li><strong>MITRE Mapping:</strong> Cross-reference ATT&CK techniques with detected threats</li>
+                                    <li><strong>Anomaly Detection:</strong> Use aggregations and subqueries to identify outliers</li>
+                                    <li><strong>Intelligence Gathering:</strong> Correlate threat data across multiple tables using joins</li>
+                                    <li><strong>CSV Upload:</strong> Ingest new security logs (via Upload page)</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <h6 class="text-danger mt-3">❌ Restricted Operations:</h6>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item text-danger">
+                                        <strong>DML (Data Manipulation):</strong> INSERT, UPDATE, DELETE
+                                        <br><small>Reason: Prevents accidental or unauthorized data modification</small>
+                                    </li>
+                                    <li class="list-group-item text-danger">
+                                        <strong>DDL (Data Definition):</strong> CREATE, ALTER, DROP, TRUNCATE
+                                        <br><small>Reason: Protects database schema integrity</small>
+                                    </li>
+                                    <li class="list-group-item text-danger">
+                                        <strong>DCL (Data Control):</strong> GRANT, REVOKE
+                                        <br><small>Reason: Prevents privilege escalation</small>
+                                    </li>
+                                    <li class="list-group-item text-danger">
+                                        <strong>TCL (Transaction Control):</strong> COMMIT, ROLLBACK, SAVEPOINT
+                                        <br><small>Reason: Transaction management requires Admin oversight</small>
+                                    </li>
+                                    <li class="list-group-item text-danger">
+                                        <strong>Procedural SQL:</strong> Procedures, Functions, Triggers, Cursors
+                                        <br><small>Reason: Database automation objects are managed by Admin/Engineer</small>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info mt-3 mb-0">
+                            <strong>💡 Access Control Policy:</strong> Read-only access enables proactive threat hunting while maintaining data integrity. All queries are logged for audit compliance.
+                        </div>
+                        
                         
                         {% endif %}
                     </div>
@@ -191,41 +436,531 @@ Example: SELECT * FROM RAW_LOGS WHERE severity='Critical' LIMIT 10"></textarea>
             <div id="query-message" class="mt-3"></div>
         </div>
 
-        <!-- Example Queries -->
+        <!-- Role-Specific Quick Queries -->
         <div class="mt-4">
-            <h5>Quick Queries (Click to Load):</h5>
-            <div class="list-group">
-                <button class="list-group-item list-group-item-action" 
-                    onclick="setQuery(this.getAttribute('data-query'))" 
-                    data-query="SELECT * FROM RAW_LOGS LIMIT 10">
-                    <strong>Recent Logs</strong> - Basic SELECT
+            <h5>Quick Queries — Click to Load (Mapped to DBMS Concepts):</h5>
+
+            {% if session.role == 'Admin' %}
+            <!-- ========== ADMIN QUERIES ========== -->
+            <h6 class="mt-3 text-muted">📖 Chapter 1 & 2 — Schema & Basic Queries</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM USERS">
+                    <strong>All Users</strong> — <span class="text-muted">Basic SELECT</span>
                 </button>
-                <button class="list-group-item list-group-item-action" 
-                    onclick="setQuery(this.getAttribute('data-query'))" 
-                    data-query="SELECT severity, COUNT(*) AS count FROM RAW_LOGS GROUP BY severity">
-                    <strong>Severity Distribution</strong> - GROUP BY
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM RAW_LOGS WHERE severity = 'Critical' LIMIT 10">
+                    <strong>Critical Logs</strong> — <span class="text-muted">WHERE Clause</span>
                 </button>
-                <button class="list-group-item list-group-item-action" 
-                    onclick="setQuery(this.getAttribute('data-query'))" 
-                    data-query="SELECT * FROM THREAT_INTELLIGENCE_DASHBOARD LIMIT 20">
-                    <strong>Threat Dashboard</strong> - Multi-table VIEW
-                </button>
-                <button class="list-group-item list-group-item-action" 
-                    onclick="setQuery(this.getAttribute('data-query'))" 
-                    data-query="SELECT technique_name, COUNT(*) as count FROM THREAT_CORRELATION tc JOIN MITRE_ATTACK_TECHNIQUES mat ON tc.technique_id = mat.technique_id GROUP BY technique_name ORDER BY count DESC LIMIT 5">
-                    <strong>Top Attack Techniques</strong> - JOIN + GROUP BY
-                </button>
-                <button class="list-group-item list-group-item-action" 
-                    onclick="setQuery(this.getAttribute('data-query'))" 
-                    data-query="SELECT * FROM ALERTS WHERE severity = 'Critical' AND status = 'Open'">
-                    <strong>Critical Open Alerts</strong> - WHERE conditions
-                </button>
-                <button class="list-group-item list-group-item-action" 
-                    onclick="setQuery(this.getAttribute('data-query'))" 
-                    data-query="SELECT mdc.countermeasure_name, SUM(mdc.implementation_cost) as total_cost FROM MITRE_DEFEND_COUNTERMEASURES mdc GROUP BY mdc.countermeasure_name ORDER BY total_cost DESC LIMIT 5">
-                    <strong>Costliest Countermeasures</strong> - SUM aggregation
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM MITRE_ATTACK_TECHNIQUES ORDER BY severity DESC">
+                    <strong>MITRE Techniques</strong> — <span class="text-muted">ORDER BY</span>
                 </button>
             </div>
+
+            <h6 class="mt-3 text-muted">📊 Chapter 3 — Aggregate Functions</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT severity, COUNT(*) AS total FROM RAW_LOGS GROUP BY severity">
+                    <strong>Log Severity Distribution</strong> — <span class="text-muted">COUNT + GROUP BY</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT AVG(confidence_score) AS avg_confidence, MIN(confidence_score) AS min_conf, MAX(confidence_score) AS max_conf FROM THREAT_CORRELATION">
+                    <strong>Confidence Score Stats</strong> — <span class="text-muted">AVG, MIN, MAX</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT alert_type, COUNT(*) AS total FROM ALERTS GROUP BY alert_type HAVING COUNT(*) > 1 ORDER BY total DESC">
+                    <strong>Frequent Alert Types</strong> — <span class="text-muted">GROUP BY + HAVING</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">🔗 Chapter 3 — Joins</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT rl.log_id, rl.source_ip, mat.technique_name, mat.tactic FROM THREAT_CORRELATION tc INNER JOIN RAW_LOGS rl ON tc.log_id = rl.log_id INNER JOIN MITRE_ATTACK_TECHNIQUES mat ON tc.technique_id = mat.technique_id LIMIT 15">
+                    <strong>Threat-Log Correlation</strong> — <span class="text-muted">INNER JOIN (3 tables)</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT u.username, u.role, al.action, al.details FROM USERS u LEFT JOIN AUDIT_LOGS al ON u.user_id = al.user_id">
+                    <strong>Users with Audit Trail</strong> — <span class="text-muted">LEFT JOIN</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT mat.technique_name, mdc.countermeasure_name FROM MITRE_ATTACK_TECHNIQUES mat CROSS JOIN MITRE_DEFEND_COUNTERMEASURES mdc LIMIT 20">
+                    <strong>Attack-Defense Matrix</strong> — <span class="text-muted">CROSS JOIN</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">🔍 Chapter 3 — Subqueries & Set Operations</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM RAW_LOGS WHERE log_id IN (SELECT log_id FROM THREAT_CORRELATION WHERE confidence_score > 0.8)">
+                    <strong>High-Confidence Threat Logs</strong> — <span class="text-muted">Nested Subquery (IN)</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT technique_id, technique_name FROM MITRE_ATTACK_TECHNIQUES WHERE technique_id NOT IN (SELECT DISTINCT technique_id FROM THREAT_CORRELATION)">
+                    <strong>Unmatched Techniques</strong> — <span class="text-muted">NOT IN (Set Difference)</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT source_ip FROM RAW_LOGS WHERE severity = 'Critical' UNION SELECT source_ip FROM RAW_LOGS WHERE severity = 'High'">
+                    <strong>Critical + High Source IPs</strong> — <span class="text-muted">UNION (Set Operation)</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">👁️ Chapter 3 — Views</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM THREAT_INTELLIGENCE_DASHBOARD LIMIT 20">
+                    <strong>Threat Intelligence Dashboard</strong> — <span class="text-muted">VIEW (Multi-table)</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM USER_ACTIVITY_SUMMARY">
+                    <strong>User Activity Summary</strong> — <span class="text-muted">VIEW (Aggregated)</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">✏️ Chapter 3 — DML (Data Manipulation)</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action list-group-item-warning" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="INSERT INTO AUDIT_LOGS (user_id, action, details) VALUES (1, 'ADMIN_TEST', 'Admin test insert from SQL Panel')">
+                    <strong>Insert Audit Log</strong> — <span class="text-muted">INSERT</span>
+                </button>
+                <button class="list-group-item list-group-item-action list-group-item-warning" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="UPDATE ALERTS SET status = 'In Progress' WHERE alert_id = 1 AND status = 'Open'">
+                    <strong>Update Alert Status</strong> — <span class="text-muted">UPDATE</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">🏗️ Chapter 3 — DDL & Constraints</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action list-group-item-warning" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="ALTER TABLE RAW_LOGS ADD CONSTRAINT chk_port CHECK (port >= 1 AND port <= 65535)">
+                    <strong>Add CHECK Constraint</strong> — <span class="text-muted">ALTER TABLE + CHECK</span>
+                </button>
+                <button class="list-group-item list-group-item-action list-group-item-warning" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="ALTER TABLE USERS ADD CONSTRAINT uq_email UNIQUE (email)">
+                    <strong>Add UNIQUE Constraint</strong> — <span class="text-muted">ALTER TABLE + UNIQUE</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">🔐 Chapter 3 — DCL (Data Control)</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action list-group-item-danger" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="GRANT SELECT ON RAW_LOGS TO analyst_role">
+                    <strong>Grant SELECT to Analyst</strong> — <span class="text-muted">GRANT</span>
+                </button>
+                <button class="list-group-item list-group-item-action list-group-item-danger" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="REVOKE INSERT ON RAW_LOGS FROM analyst_role">
+                    <strong>Revoke INSERT from Analyst</strong> — <span class="text-muted">REVOKE</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">🔄 Chapter 3 — TCL (Transaction Control)</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action list-group-item-danger" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="BEGIN; SAVEPOINT before_update; UPDATE ALERTS SET status = 'Resolved' WHERE alert_id = 1; ROLLBACK TO before_update; COMMIT;">
+                    <strong>Transaction with Savepoint</strong> — <span class="text-muted">BEGIN, SAVEPOINT, ROLLBACK TO, COMMIT</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">⚙️ Chapter 3 — Procedural SQL</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action list-group-item-danger" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="CALL sp_threat_summary_report()">
+                    <strong>Call Stored Procedure</strong> — <span class="text-muted">Stored Procedure (CALL)</span>
+                </button>
+                <button class="list-group-item list-group-item-action list-group-item-danger" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT fn_calculate_risk_score(1) AS risk_score">
+                    <strong>Calculate Risk Score</strong> — <span class="text-muted">User-Defined Function</span>
+                </button>
+            </div>
+
+            {% elif session.role == 'Engineer' %}
+            <!-- ========== ENGINEER QUERIES ========== -->
+            <h6 class="mt-3 text-muted">📖 Chapter 1 & 2 — Schema & Basic Queries</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM RAW_LOGS LIMIT 10">
+                    <strong>Recent Logs</strong> — <span class="text-muted">Basic SELECT</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM MITRE_ATTACK_TECHNIQUES WHERE severity = 'Critical'">
+                    <strong>Critical MITRE Techniques</strong> — <span class="text-muted">WHERE Clause</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">📊 Chapter 3 — Aggregate Functions</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT severity, COUNT(*) AS total FROM RAW_LOGS GROUP BY severity">
+                    <strong>Log Severity Distribution</strong> — <span class="text-muted">COUNT + GROUP BY</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT protocol, COUNT(*) AS total, AVG(port) AS avg_port FROM RAW_LOGS GROUP BY protocol HAVING COUNT(*) > 1">
+                    <strong>Protocol Analysis</strong> — <span class="text-muted">COUNT, AVG + HAVING</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">🔗 Chapter 3 — Joins</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT rl.log_id, rl.source_ip, rl.severity, mat.technique_name, mat.tactic FROM THREAT_CORRELATION tc INNER JOIN RAW_LOGS rl ON tc.log_id = rl.log_id INNER JOIN MITRE_ATTACK_TECHNIQUES mat ON tc.technique_id = mat.technique_id LIMIT 15">
+                    <strong>Threat-Log Correlation</strong> — <span class="text-muted">INNER JOIN (3 tables)</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT tc.correlation_id, mat.technique_name, mdc.countermeasure_name FROM THREAT_CORRELATION tc INNER JOIN MITRE_ATTACK_TECHNIQUES mat ON tc.technique_id = mat.technique_id LEFT JOIN MITRE_DEFEND_COUNTERMEASURES mdc ON tc.countermeasure_id = mdc.countermeasure_id">
+                    <strong>Attack-Defense Mapping</strong> — <span class="text-muted">LEFT JOIN</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">🔍 Chapter 3 — Subqueries & Set Operations</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM RAW_LOGS WHERE log_id IN (SELECT log_id FROM THREAT_CORRELATION WHERE confidence_score > 0.8)">
+                    <strong>High-Confidence Threat Logs</strong> — <span class="text-muted">Nested Subquery (IN)</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT source_ip FROM RAW_LOGS WHERE severity = 'Critical' UNION SELECT source_ip FROM RAW_LOGS WHERE severity = 'High'">
+                    <strong>Critical + High Source IPs</strong> — <span class="text-muted">UNION</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">👁️ Chapter 3 — Views</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM THREAT_INTELLIGENCE_DASHBOARD LIMIT 20">
+                    <strong>Threat Intelligence Dashboard</strong> — <span class="text-muted">VIEW</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM USER_ACTIVITY_SUMMARY">
+                    <strong>User Activity Summary</strong> — <span class="text-muted">VIEW</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">✏️ Chapter 3 — DML (Data Manipulation)</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action list-group-item-warning" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="INSERT INTO AUDIT_LOGS (user_id, action, details) VALUES (1, 'ENGINEER_TEST', 'Engineer test insert from SQL Panel')">
+                    <strong>Insert Audit Log</strong> — <span class="text-muted">INSERT</span>
+                </button>
+                <button class="list-group-item list-group-item-action list-group-item-warning" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="UPDATE ALERTS SET status = 'In Progress' WHERE alert_id = 1 AND status = 'Open'">
+                    <strong>Update Alert Status</strong> — <span class="text-muted">UPDATE</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">🏗️ Chapter 3 — DDL & Constraints</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action list-group-item-warning" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="ALTER TABLE RAW_LOGS ADD CONSTRAINT chk_port CHECK (port >= 1 AND port <= 65535)">
+                    <strong>Add CHECK Constraint</strong> — <span class="text-muted">ALTER TABLE + CHECK</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">⚙️ Chapter 3 — Procedural SQL</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action list-group-item-warning" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="CALL sp_threat_summary_report()">
+                    <strong>Call Stored Procedure</strong> — <span class="text-muted">Stored Procedure</span>
+                </button>
+                <button class="list-group-item list-group-item-action list-group-item-warning" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT fn_calculate_risk_score(1) AS risk_score">
+                    <strong>Calculate Risk Score</strong> — <span class="text-muted">User-Defined Function</span>
+                </button>
+            </div>
+
+            {% elif session.role == 'Manager' %}
+            <!-- ========== MANAGER QUERIES ========== -->
+            <h6 class="mt-3 text-muted">📖 Chapter 1 & 2 — Schema & Basic Queries</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT username, role, email, is_active FROM USERS">
+                    <strong>Team Roster</strong> — <span class="text-muted">Basic SELECT</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM ALERTS WHERE status = 'Open' ORDER BY severity DESC">
+                    <strong>Open Alerts Overview</strong> — <span class="text-muted">WHERE + ORDER BY</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">📊 Chapter 3 — Aggregate Functions</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT severity, COUNT(*) AS total FROM ALERTS GROUP BY severity ORDER BY total DESC">
+                    <strong>Alert Severity Summary</strong> — <span class="text-muted">COUNT + GROUP BY</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT status, COUNT(*) AS total FROM ALERTS GROUP BY status HAVING COUNT(*) > 1">
+                    <strong>Alert Status Breakdown</strong> — <span class="text-muted">GROUP BY + HAVING</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT category, COUNT(*) AS total, SUM(implementation_cost) AS total_cost, AVG(implementation_cost) AS avg_cost FROM MITRE_DEFEND_COUNTERMEASURES GROUP BY category">
+                    <strong>Defense Budget Analysis</strong> — <span class="text-muted">SUM, AVG, COUNT</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">🔗 Chapter 3 — Joins</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT u.username, u.role, al.action, al.timestamp FROM USERS u INNER JOIN AUDIT_LOGS al ON u.user_id = al.user_id ORDER BY al.timestamp DESC">
+                    <strong>Team Audit Activity</strong> — <span class="text-muted">INNER JOIN</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT u.username, u.role, al.action FROM USERS u LEFT JOIN AUDIT_LOGS al ON u.user_id = al.user_id">
+                    <strong>All Users with Activity</strong> — <span class="text-muted">LEFT JOIN</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT mat.technique_name, mdc.countermeasure_name FROM MITRE_ATTACK_TECHNIQUES mat CROSS JOIN MITRE_DEFEND_COUNTERMEASURES mdc LIMIT 20">
+                    <strong>Attack-Defense Matrix</strong> — <span class="text-muted">CROSS JOIN</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">🔍 Chapter 3 — Subqueries & Set Operations</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT username, role FROM USERS WHERE user_id IN (SELECT assigned_to FROM ALERTS WHERE status = 'Open')">
+                    <strong>Analysts with Open Alerts</strong> — <span class="text-muted">Nested Subquery</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT technique_id, technique_name FROM MITRE_ATTACK_TECHNIQUES WHERE technique_id NOT IN (SELECT DISTINCT technique_id FROM THREAT_CORRELATION)">
+                    <strong>Undetected Techniques</strong> — <span class="text-muted">NOT IN (Set Difference)</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT source_ip FROM RAW_LOGS WHERE severity = 'Critical' UNION SELECT source_ip FROM RAW_LOGS WHERE severity = 'High'">
+                    <strong>Critical + High Source IPs</strong> — <span class="text-muted">UNION</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">👁️ Chapter 3 — Views</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM THREAT_INTELLIGENCE_DASHBOARD LIMIT 20">
+                    <strong>Threat Intelligence Dashboard</strong> — <span class="text-muted">VIEW</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM USER_ACTIVITY_SUMMARY">
+                    <strong>User Activity Summary</strong> — <span class="text-muted">VIEW</span>
+                </button>
+            </div>
+
+            {% elif session.role == 'Analyst' %}
+            <!-- ========== ANALYST QUERIES ========== -->
+            <h6 class="mt-3 text-muted">📖 Chapter 1 & 2 — Schema & Basic Queries</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM RAW_LOGS ORDER BY timestamp DESC LIMIT 10">
+                    <strong>Latest Security Logs</strong> — <span class="text-muted">Basic SELECT + ORDER BY</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM ALERTS WHERE severity = 'Critical' AND status = 'Open'">
+                    <strong>Critical Open Alerts</strong> — <span class="text-muted">WHERE + AND</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">📊 Chapter 3 — Aggregate Functions</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT severity, COUNT(*) AS total FROM RAW_LOGS GROUP BY severity">
+                    <strong>Severity Distribution</strong> — <span class="text-muted">COUNT + GROUP BY</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT alert_type, severity, COUNT(*) AS total FROM ALERTS GROUP BY alert_type, severity HAVING COUNT(*) > 1 ORDER BY total DESC">
+                    <strong>Alert Patterns</strong> — <span class="text-muted">Multi-column GROUP BY + HAVING</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT AVG(confidence_score) AS avg_confidence, MIN(confidence_score) AS min_conf, MAX(confidence_score) AS max_conf FROM THREAT_CORRELATION">
+                    <strong>Confidence Score Stats</strong> — <span class="text-muted">AVG, MIN, MAX</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">🔗 Chapter 3 — Joins</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT rl.source_ip, rl.destination_ip, rl.severity, mat.technique_name, mat.tactic FROM THREAT_CORRELATION tc INNER JOIN RAW_LOGS rl ON tc.log_id = rl.log_id INNER JOIN MITRE_ATTACK_TECHNIQUES mat ON tc.technique_id = mat.technique_id">
+                    <strong>Log-Technique Mapping</strong> — <span class="text-muted">INNER JOIN</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT tc.correlation_id, mat.technique_name, mdc.countermeasure_name, mdc.effectiveness_rating FROM THREAT_CORRELATION tc INNER JOIN MITRE_ATTACK_TECHNIQUES mat ON tc.technique_id = mat.technique_id LEFT JOIN MITRE_DEFEND_COUNTERMEASURES mdc ON tc.countermeasure_id = mdc.countermeasure_id">
+                    <strong>Attack with Countermeasures</strong> — <span class="text-muted">LEFT JOIN</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT mat.technique_name, mdc.countermeasure_name FROM MITRE_ATTACK_TECHNIQUES mat CROSS JOIN MITRE_DEFEND_COUNTERMEASURES mdc LIMIT 20">
+                    <strong>Full Attack-Defense Matrix</strong> — <span class="text-muted">CROSS JOIN</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">🔍 Chapter 3 — Subqueries & Set Operations</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM RAW_LOGS WHERE log_id IN (SELECT log_id FROM THREAT_CORRELATION WHERE confidence_score > 0.8)">
+                    <strong>High-Confidence Threats</strong> — <span class="text-muted">Nested Subquery</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT technique_id, technique_name FROM MITRE_ATTACK_TECHNIQUES WHERE technique_id NOT IN (SELECT DISTINCT technique_id FROM THREAT_CORRELATION)">
+                    <strong>Undetected Techniques</strong> — <span class="text-muted">NOT IN (Set Difference)</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT source_ip FROM RAW_LOGS WHERE severity = 'Critical' UNION SELECT source_ip FROM RAW_LOGS WHERE severity = 'High'">
+                    <strong>Critical + High IPs</strong> — <span class="text-muted">UNION</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">👁️ Chapter 3 — Views</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM THREAT_INTELLIGENCE_DASHBOARD LIMIT 20">
+                    <strong>Threat Intelligence Dashboard</strong> — <span class="text-muted">VIEW</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM USER_ACTIVITY_SUMMARY">
+                    <strong>User Activity Summary</strong> — <span class="text-muted">VIEW</span>
+                </button>
+            </div>
+
+            {% elif session.role == 'Responder' %}
+            <!-- ========== RESPONDER QUERIES ========== -->
+            <h6 class="mt-3 text-muted">📖 Chapter 1 & 2 — Schema & Basic Queries</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM ALERTS WHERE status = 'Open' ORDER BY severity DESC">
+                    <strong>Open Alerts (Priority Order)</strong> — <span class="text-muted">WHERE + ORDER BY</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM RAW_LOGS WHERE severity IN ('Critical', 'High') LIMIT 15">
+                    <strong>High-Severity Logs</strong> — <span class="text-muted">WHERE + IN</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">📊 Chapter 3 — Aggregate Functions</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT alert_type, COUNT(*) AS total FROM ALERTS WHERE status = 'Open' GROUP BY alert_type ORDER BY total DESC">
+                    <strong>Open Alert Types</strong> — <span class="text-muted">COUNT + GROUP BY</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT source_ip, COUNT(*) AS incident_count FROM RAW_LOGS WHERE severity = 'Critical' GROUP BY source_ip HAVING COUNT(*) > 1 ORDER BY incident_count DESC">
+                    <strong>Repeat Offender IPs</strong> — <span class="text-muted">GROUP BY + HAVING</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">🔗 Chapter 3 — Joins</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT a.alert_id, a.alert_type, a.severity, rl.source_ip, rl.destination_ip, rl.protocol FROM ALERTS a INNER JOIN THREAT_CORRELATION tc ON a.correlation_id = tc.correlation_id INNER JOIN RAW_LOGS rl ON tc.log_id = rl.log_id WHERE a.status = 'Open'">
+                    <strong>Alert Source Details</strong> — <span class="text-muted">INNER JOIN (3 tables)</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT tc.correlation_id, mat.technique_name, mdc.countermeasure_name, mdc.effectiveness_rating FROM THREAT_CORRELATION tc INNER JOIN MITRE_ATTACK_TECHNIQUES mat ON tc.technique_id = mat.technique_id LEFT JOIN MITRE_DEFEND_COUNTERMEASURES mdc ON tc.countermeasure_id = mdc.countermeasure_id">
+                    <strong>Countermeasure Options</strong> — <span class="text-muted">LEFT JOIN</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT mat.technique_name, mdc.countermeasure_name FROM MITRE_ATTACK_TECHNIQUES mat CROSS JOIN MITRE_DEFEND_COUNTERMEASURES mdc LIMIT 20">
+                    <strong>All Possible Mitigations</strong> — <span class="text-muted">CROSS JOIN</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">🔍 Chapter 3 — Subqueries & Set Operations</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM RAW_LOGS WHERE log_id IN (SELECT log_id FROM THREAT_CORRELATION WHERE confidence_score > 0.9)">
+                    <strong>Highest Confidence Incidents</strong> — <span class="text-muted">Nested Subquery</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT countermeasure_id, countermeasure_name FROM MITRE_DEFEND_COUNTERMEASURES WHERE countermeasure_id NOT IN (SELECT DISTINCT countermeasure_id FROM THREAT_CORRELATION WHERE countermeasure_id IS NOT NULL)">
+                    <strong>Unused Countermeasures</strong> — <span class="text-muted">NOT IN (Set Difference)</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT source_ip FROM RAW_LOGS WHERE severity = 'Critical' UNION SELECT source_ip FROM RAW_LOGS WHERE severity = 'High'">
+                    <strong>Critical + High IPs</strong> — <span class="text-muted">UNION</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">👁️ Chapter 3 — Views</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM THREAT_INTELLIGENCE_DASHBOARD LIMIT 20">
+                    <strong>Threat Intelligence Dashboard</strong> — <span class="text-muted">VIEW</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM USER_ACTIVITY_SUMMARY">
+                    <strong>User Activity Summary</strong> — <span class="text-muted">VIEW</span>
+                </button>
+            </div>
+
+            {% elif session.role == 'Hunter' %}
+            <!-- ========== HUNTER QUERIES ========== -->
+            <h6 class="mt-3 text-muted">📖 Chapter 1 & 2 — Schema & Basic Queries</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT DISTINCT source_ip, destination_ip, protocol FROM RAW_LOGS">
+                    <strong>Unique Network Connections</strong> — <span class="text-muted">SELECT DISTINCT</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM RAW_LOGS WHERE protocol NOT IN ('TCP', 'HTTP', 'HTTPS') ORDER BY timestamp DESC">
+                    <strong>Unusual Protocols</strong> — <span class="text-muted">WHERE + NOT IN</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">📊 Chapter 3 — Aggregate Functions</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT source_ip, COUNT(*) AS event_count FROM RAW_LOGS GROUP BY source_ip ORDER BY event_count DESC LIMIT 10">
+                    <strong>Top Source IPs by Volume</strong> — <span class="text-muted">COUNT + GROUP BY</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT tactic, COUNT(*) AS technique_count FROM MITRE_ATTACK_TECHNIQUES GROUP BY tactic HAVING COUNT(*) > 1 ORDER BY technique_count DESC">
+                    <strong>Most-Used Tactics</strong> — <span class="text-muted">GROUP BY + HAVING</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT protocol, COUNT(*) AS total, MIN(port) AS min_port, MAX(port) AS max_port FROM RAW_LOGS GROUP BY protocol">
+                    <strong>Protocol Port Ranges</strong> — <span class="text-muted">MIN, MAX + GROUP BY</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">🔗 Chapter 3 — Joins</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT rl.source_ip, rl.protocol, mat.technique_name, mat.tactic, tc.confidence_score FROM THREAT_CORRELATION tc INNER JOIN RAW_LOGS rl ON tc.log_id = rl.log_id INNER JOIN MITRE_ATTACK_TECHNIQUES mat ON tc.technique_id = mat.technique_id ORDER BY tc.confidence_score DESC">
+                    <strong>Threat Hunt Results</strong> — <span class="text-muted">INNER JOIN (3 tables)</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT mat.technique_name, mdc.countermeasure_name, mdc.effectiveness_rating FROM MITRE_ATTACK_TECHNIQUES mat LEFT JOIN THREAT_CORRELATION tc ON mat.technique_id = tc.technique_id LEFT JOIN MITRE_DEFEND_COUNTERMEASURES mdc ON tc.countermeasure_id = mdc.countermeasure_id">
+                    <strong>Technique Coverage Gaps</strong> — <span class="text-muted">LEFT JOIN</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT mat.technique_name, mdc.countermeasure_name FROM MITRE_ATTACK_TECHNIQUES mat CROSS JOIN MITRE_DEFEND_COUNTERMEASURES mdc LIMIT 20">
+                    <strong>Full Threat-Defense Cartesian</strong> — <span class="text-muted">CROSS JOIN</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">🔍 Chapter 3 — Subqueries & Set Operations</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM RAW_LOGS WHERE log_id NOT IN (SELECT log_id FROM THREAT_CORRELATION)">
+                    <strong>Uncorrelated Logs (Hidden Threats)</strong> — <span class="text-muted">NOT IN (Set Difference)</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM RAW_LOGS WHERE log_id IN (SELECT log_id FROM THREAT_CORRELATION WHERE confidence_score = (SELECT MAX(confidence_score) FROM THREAT_CORRELATION))">
+                    <strong>Highest Confidence Match</strong> — <span class="text-muted">Nested Subquery (Scalar)</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT source_ip FROM RAW_LOGS WHERE severity = 'Critical' UNION SELECT source_ip FROM RAW_LOGS WHERE severity = 'High'">
+                    <strong>Critical + High IPs</strong> — <span class="text-muted">UNION</span>
+                </button>
+            </div>
+
+            <h6 class="mt-3 text-muted">👁️ Chapter 3 — Views</h6>
+            <div class="list-group mb-3">
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM THREAT_INTELLIGENCE_DASHBOARD LIMIT 20">
+                    <strong>Threat Intelligence Dashboard</strong> — <span class="text-muted">VIEW</span>
+                </button>
+                <button class="list-group-item list-group-item-action" onclick="setQuery(this.getAttribute('data-query'))"
+                    data-query="SELECT * FROM USER_ACTIVITY_SUMMARY">
+                    <strong>User Activity Summary</strong> — <span class="text-muted">VIEW</span>
+                </button>
+            </div>
+
+            {% endif %}
         </div>
 
         <!-- Query Results Table -->

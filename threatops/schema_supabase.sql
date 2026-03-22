@@ -132,19 +132,19 @@ CREATE INDEX IF NOT EXISTS idx_action          ON audit_logs(action_type);
 -- Note: Usernames use spaces not underscores
 -- ================================================================
 INSERT INTO users (username, password_hash, role, email, created_at, last_login, is_active) VALUES
-('rajesh kumar',   encode(digest('ADM123',   'sha256'), 'hex'), 'Admin',     'rajesh.kumar@threatops.local',   '2026-01-01 08:00:00', '2026-02-15 09:30:00', TRUE),
-('deepak verma',   encode(digest('ADM123',   'sha256'), 'hex'), 'Admin',     'deepak.verma@threatops.local',   '2026-01-02 09:00:00', '2026-02-14 18:00:00', TRUE),
-('priya sharma',   encode(digest('MGR123',   'sha256'), 'hex'), 'Manager',   'priya.sharma@threatops.local',   '2026-01-01 08:15:00', '2026-02-15 10:00:00', TRUE),
-('amit patel',     encode(digest('ANLST123', 'sha256'), 'hex'), 'Analyst',   'amit.patel@threatops.local',     '2026-01-05 10:00:00', '2026-02-14 16:20:00', TRUE),
-('sneha singh',    encode(digest('ANLST123', 'sha256'), 'hex'), 'Analyst',   'sneha.singh@threatops.local',    '2026-01-10 11:30:00', '2026-02-15 07:15:00', TRUE),
-('rohan gupta',    encode(digest('ANLST123', 'sha256'), 'hex'), 'Analyst',   'rohan.gupta@threatops.local',    '2026-01-15 14:00:00', '2026-02-13 10:30:00', TRUE),
-('meera krishnan', encode(digest('ANLST123', 'sha256'), 'hex'), 'Analyst',   'meera.krishnan@threatops.local', '2026-01-18 09:30:00', '2026-02-12 14:45:00', TRUE),
-('arjun reddy',    encode(digest('ENG123',   'sha256'), 'hex'), 'Engineer',  'arjun.reddy@threatops.local',    '2026-01-08 08:30:00', '2026-02-14 15:00:00', TRUE),
-('vikram desai',   encode(digest('ENG123',   'sha256'), 'hex'), 'Engineer',  'vikram.desai@threatops.local',   '2026-01-12 13:00:00', '2026-02-13 11:30:00', TRUE),
-('kavya iyer',     encode(digest('RESP123',  'sha256'), 'hex'), 'Responder', 'kavya.iyer@threatops.local',     '2026-01-06 16:00:00', '2026-02-15 08:45:00', TRUE),
-('sanjay rao',     encode(digest('RESP123',  'sha256'), 'hex'), 'Responder', 'sanjay.rao@threatops.local',     '2026-01-14 10:30:00', '2026-02-11 16:20:00', TRUE),
-('ananya nair',    encode(digest('HUNT123',  'sha256'), 'hex'), 'Hunter',    'ananya.nair@threatops.local',    '2026-01-10 15:00:00', '2026-02-14 12:00:00', TRUE),
-('inactive user',  encode(digest('ANLST123', 'sha256'), 'hex'), 'Analyst',   'inactive@threatops.local',       '2026-01-01 08:00:00', '2026-01-05 10:00:00', FALSE);
+('rajeshKumar',   encode(digest('ADM123',   'sha256'), 'hex'), 'Admin',     'rajesh.kumar@threatops.local',   '2026-01-01 08:00:00', '2026-02-15 09:30:00', TRUE),
+('deepakVerma',   encode(digest('ADM123',   'sha256'), 'hex'), 'Admin',     'deepak.verma@threatops.local',   '2026-01-02 09:00:00', '2026-02-14 18:00:00', TRUE),
+('priyaSharma',   encode(digest('MGR123',   'sha256'), 'hex'), 'Manager',   'priya.sharma@threatops.local',   '2026-01-01 08:15:00', '2026-02-15 10:00:00', TRUE),
+('amitPatel',     encode(digest('ANLST123', 'sha256'), 'hex'), 'Analyst',   'amit.patel@threatops.local',     '2026-01-05 10:00:00', '2026-02-14 16:20:00', TRUE),
+('snehaSingh',    encode(digest('ANLST123', 'sha256'), 'hex'), 'Analyst',   'sneha.singh@threatops.local',    '2026-01-10 11:30:00', '2026-02-15 07:15:00', TRUE),
+('rohanGupta',    encode(digest('ANLST123', 'sha256'), 'hex'), 'Analyst',   'rohan.gupta@threatops.local',    '2026-01-15 14:00:00', '2026-02-13 10:30:00', TRUE),
+('meeraKrishnan', encode(digest('ANLST123', 'sha256'), 'hex'), 'Analyst',   'meera.krishnan@threatops.local', '2026-01-18 09:30:00', '2026-02-12 14:45:00', TRUE),
+('arjunReddy',    encode(digest('ENG123',   'sha256'), 'hex'), 'Engineer',  'arjun.reddy@threatops.local',    '2026-01-08 08:30:00', '2026-02-14 15:00:00', TRUE),
+('vikramDesai',   encode(digest('ENG123',   'sha256'), 'hex'), 'Engineer',  'vikram.desai@threatops.local',   '2026-01-12 13:00:00', '2026-02-13 11:30:00', TRUE),
+('kavyaIyer',     encode(digest('RESP123',  'sha256'), 'hex'), 'Responder', 'kavya.iyer@threatops.local',     '2026-01-06 16:00:00', '2026-02-15 08:45:00', TRUE),
+('sanjayRao',     encode(digest('RESP123',  'sha256'), 'hex'), 'Responder', 'sanjay.rao@threatops.local',     '2026-01-14 10:30:00', '2026-02-11 16:20:00', TRUE),
+('ananyaNair',    encode(digest('HUNT123',  'sha256'), 'hex'), 'Hunter',    'ananya.nair@threatops.local',    '2026-01-10 15:00:00', '2026-02-14 12:00:00', TRUE),
+('inactiveUser',  encode(digest('ANLST123', 'sha256'), 'hex'), 'Analyst',   'inactive@threatops.local',       '2026-01-01 08:00:00', '2026-01-05 10:00:00', FALSE);
 
 -- ================================================================
 -- POPULATE MITRE ATT&CK TECHNIQUES (15 techniques)
