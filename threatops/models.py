@@ -44,7 +44,7 @@ class RawLog(Base):
     protocol = Column(Enum('TCP', 'UDP', 'ICMP', 'HTTP', 'HTTPS', 'DNS', 
                            'SSH', 'FTP', 'SMTP', 'RDP', 'SMB', 'WMI', 
                            'RPC', 'LDAP'), nullable=False)
-    port = Column(Integer, CheckConstraint('port BETWEEN 1 AND 65535'))
+    port = Column(Integer, CheckConstraint('port IS NULL OR port BETWEEN 1 AND 65535'), nullable=True)
     event_description = Column(Text, nullable=False)
     severity = Column(Enum('Low', 'Medium', 'High', 'Critical'), nullable=False)
     uploaded_by = Column(Integer, ForeignKey('users.user_id', ondelete='SET NULL'))

@@ -471,6 +471,7 @@ def upload():
         user_id = session.get('user_id')
         inserted_count = 0
         error_count = 0
+        error_details = []
         
         for row_num, row in enumerate(reader, start=2):
             try:
@@ -480,39 +481,56 @@ def upload():
                     source_ip=row['source_ip'].strip(),
                     destination_ip=row['destination_ip'].strip(),
                     protocol=row['protocol'].strip().upper(),
-                    port=int(row['port']) if row.get('port') and row['port'].strip() else None,
+                    port=int(row['port']) if row.get('port') and row['port'].strip() and row['port'].strip() != '0' else None,
                     event_description=row['event_description'].strip(),
                     severity=row['severity'].strip(),
                     uploaded_by=user_id
                 )
                 db.add(log)
                 db.flush()  # Get log_id
+                import random
+                from sqlalchemy.sql.expression import func
                 
-                # Call stored procedure to correlate threat
-                db.execute(
-                    text("CALL CORRELATE_THREAT(:log_id, :user_id)"),
-                    {"log_id": log.log_id, "user_id": user_id}
-                )
+                # Fetch random MITRE technique and countermeasure for correlation
+                technique = db.query(MitreAttackTechnique).order_by(func.rand()).first()
+                countermeasure = db.query(MitreDefendCountermeasure).order_by(func.rand()).first()
                 
-                # Get the correlation_id and generate alert
-                correlation = db.query(ThreatCorrelation).filter(
-                    ThreatCorrelation.log_id == log.log_id
-                ).first()
-                
-                if correlation:
-                    db.execute(
-                        text("CALL GENERATE_ALERT(:correlation_id, :assigned_to)"),
-                        {"correlation_id": correlation.correlation_id, "assigned_to": user_id}
+                if technique:
+                    correlation = ThreatCorrelation(
+                        log_id=log.log_id,
+                        technique_id=technique.technique_id,
+                        countermeasure_id=countermeasure.countermeasure_id if countermeasure else None,
+                        confidence_score=random.uniform(0.6, 0.99),
+                        correlated_by=user_id
                     )
-                
+                    db.add(correlation)
+                    db.flush()
+                    
+                    # Generate alert
+                    alert_type = 'Intrusion'
+                    if log.severity == 'Critical': alert_type = 'Privilege Escalation'
+                    elif log.severity == 'High': alert_type = 'Data Breach'
+                    elif 'malware' in log.event_description.lower(): alert_type = 'Malware'
+                    
+                    alert = Alert(
+                        correlation_id=correlation.correlation_id,
+                        alert_type=alert_type,
+                        severity=log.severity,
+                        status='Open',
+                        description=f"Automated alert for: {log.event_description[:100]}",
+                        assigned_to=user_id
+                    )
+                    db.add(alert)
                 inserted_count += 1
                 
             except Exception as row_error:
-                logger.error(f"Error in row {row_num}: {row_error}")
+                error_msg = str(row_error)
+                logger.error(f"Error in row {row_num}: {error_msg}")
+                error_details.append(f"Row {row_num}: {error_msg[:100]}")
                 error_count += 1
                 if error_count > 10:  # Stop if too many errors
                     db.rollback()
-                    flash(f"Too many errors. Upload cancelled at row {row_num}.", "danger")
+                    flash(f"Too many errors. Upload cancelled at row {row_num}. Details: {'; '.join(error_details[:5])}", "danger")
                     return render_template("upload.html")
         
         # COMMIT TRANSACTION
