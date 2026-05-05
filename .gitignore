@@ -6,10 +6,12 @@ __pycache__/
 .Python
 env/
 venv/
+.venv/
 ENV/
 build/
 dist/
 *.egg-info/
+.pytest_cache/
 
 # Environment
 .env
@@ -17,8 +19,6 @@ dist/
 
 # Logs
 *.log
-app.log
-app.error.log
 
 # IDE
 .vscode/
@@ -31,4 +31,4 @@ app.error.log
 Thumbs.db
 
 # Vercel (if you ever re-add it)
-.vercel/
+.vercel/

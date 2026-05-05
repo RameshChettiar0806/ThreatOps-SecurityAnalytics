@@ -19,11 +19,6 @@ function formatIndianNumber(num, addRupeeSymbol = true) {
     return num < 0 ? `-${prefix}${formatted}` : `${prefix}${formatted}`;
 }
 
-const loadSampleButton = document.getElementById("load-sample");
-const loadSampleForm = document.getElementById("load-sample-form");
-const loadSampleMessage = document.getElementById("load-sample-message");
-const dashboardMessage = document.getElementById("dashboard-message");
-
 const runQueryButton = document.getElementById("run-query");
 const sqlQueryInput = document.getElementById("sql-query");
 const queryMessage = document.getElementById("query-message");
@@ -35,36 +30,71 @@ const chartTypeSelect = document.getElementById("chart-type");
 
 let logChart = null;
 
+const getCsrfToken = () => window.csrfToken || "";
+
 const showMessage = (container, message, type = "success") => {
-    if (!container) {
+    if (!container || container === document.body) {
+        let alertHost = document.getElementById("global-alert-host");
+        if (!alertHost) {
+            alertHost = document.createElement("div");
+            alertHost.id = "global-alert-host";
+            alertHost.className = "container mt-3";
+            document.body.prepend(alertHost);
+        }
+        alertHost.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
         return;
     }
     container.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
 };
 
-const loadSampleDataset = async (messageContainer) => {
-    try {
-        const response = await fetch("/load_sample_dataset", { method: "POST" });
-        const data = await response.json();
-        if (!response.ok) {
-            showMessage(messageContainer, data.message || "Failed to load sample data.", "danger");
-            return;
-        }
-        showMessage(messageContainer, data.message, "success");
-    } catch (error) {
-        showMessage(messageContainer, `Request failed: ${error}`, "danger");
+function numberToIndianWords(amount) {
+    if (amount === null || amount === undefined || Number.isNaN(amount)) {
+        return "Zero rupees";
     }
-};
 
-if (loadSampleButton) {
-    loadSampleButton.addEventListener("click", () => loadSampleDataset(loadSampleMessage));
-}
+    const ones = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
+        "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+    const tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
 
-if (loadSampleForm) {
-    loadSampleForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-        loadSampleDataset(dashboardMessage);
-    });
+    const twoDigits = (num) => {
+        if (num < 20) {
+            return ones[num];
+        }
+        const remainder = num % 10;
+        return `${tens[Math.floor(num / 10)]}${remainder ? ` ${ones[remainder]}` : ""}`.trim();
+    };
+
+    const threeDigits = (num) => {
+        const hundred = Math.floor(num / 100);
+        const remainder = num % 100;
+        const hundredPart = hundred ? `${ones[hundred]} Hundred` : "";
+        const remainderPart = remainder ? twoDigits(remainder) : "";
+        return `${hundredPart}${hundredPart && remainderPart ? " " : ""}${remainderPart}`.trim();
+    };
+
+    const whole = Math.floor(Math.abs(amount));
+    const paise = Math.round((Math.abs(amount) - whole) * 100);
+
+    if (whole === 0) {
+        return paise ? `${twoDigits(paise)} Paise` : "Zero Rupees";
+    }
+
+    const crore = Math.floor(whole / 10000000);
+    const lakh = Math.floor((whole % 10000000) / 100000);
+    const thousand = Math.floor((whole % 100000) / 1000);
+    const remainder = whole % 1000;
+
+    const parts = [];
+    if (crore) parts.push(`${twoDigits(crore)} Crore`);
+    if (lakh) parts.push(`${twoDigits(lakh)} Lakh`);
+    if (thousand) parts.push(`${twoDigits(thousand)} Thousand`);
+    if (remainder) parts.push(threeDigits(remainder));
+
+    let words = `${parts.join(" ")} Rupees`;
+    if (paise) {
+        words += ` and ${twoDigits(paise)} Paise`;
+    }
+    return words.trim();
 }
 
 if (runQueryButton) {
@@ -77,7 +107,10 @@ if (runQueryButton) {
         try {
             const response = await fetch("/run_query", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-Token": getCsrfToken(),
+                },
                 body: JSON.stringify({ query }),
             });
             const data = await response.json();

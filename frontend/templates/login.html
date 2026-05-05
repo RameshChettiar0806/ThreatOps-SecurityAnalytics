@@ -286,6 +286,7 @@
                             <h4 class="mb-4 text-center" style="color: #1a2332; font-weight: 700;">Account Login</h4>
 
                             <form method="POST" action="{{ url_for('login') }}">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token_value }}" />
                                 <div class="mb-4">
                                     <label for="username" class="form-label">🔐 Username</label>
                                     <input type="text" class="form-control" id="username" name="username" required autofocus placeholder="Enter your username" />
@@ -306,9 +307,12 @@
                         <div class="col-lg-7 p-5 bg-light bg-opacity-50">
                             <div class="users-card h-100">
                                 <div class="card-header text-white">
-                                    <h6 class="mb-0">👥 SOC/CIRT Team Access <small class="opacity-75">(Click to auto-fill)</small></h6>
+                                    <h6 class="mb-0">👥 SOC/CIRT Team Access <small class="opacity-75">(Click to fill username)</small></h6>
                                 </div>
                                 <div class="card-body p-0">
+                                    <div class="p-3 border-bottom bg-white">
+                                        <small class="text-muted">Shared demo passwords are documented in the project setup guide. The page only exposes usernames and roles.</small>
+                                    </div>
                                     <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
                                         <table class="table table-sm table-hover mb-0">
                                             <thead class="table-light sticky-top">
@@ -319,62 +323,62 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="userTable">
-                                                <tr class="user-row" data-username="rajeshKumar" data-password="ADM123" onclick="fillCredentials('rajeshKumar', 'ADM123')">
+                                                <tr class="user-row" data-username="rajeshKumar" onclick="fillUsername('rajeshKumar')">
                                                     <td><small>Rajesh Kumar</small></td>
                                                     <td><small><strong>rajeshKumar</strong></small></td>
                                                     <td><span class="badge bg-danger">Admin</span></td>
                                                 </tr>
-                                                <tr class="user-row" data-username="deepakVerma" data-password="ADM123" onclick="fillCredentials('deepakVerma', 'ADM123')">
+                                                <tr class="user-row" data-username="deepakVerma" onclick="fillUsername('deepakVerma')">
                                                     <td><small>Deepak Verma</small></td>
                                                     <td><small><strong>deepakVerma</strong></small></td>
                                                     <td><span class="badge bg-danger">Admin</span></td>
                                                 </tr>
-                                                <tr class="user-row" data-username="priyaSharma" data-password="MGR123" onclick="fillCredentials('priyaSharma', 'MGR123')">
+                                                <tr class="user-row" data-username="priyaSharma" onclick="fillUsername('priyaSharma')">
                                                     <td><small>Priya Sharma</small></td>
                                                     <td><small><strong>priyaSharma</strong></small></td>
                                                     <td><span class="badge bg-success">Manager</span></td>
                                                 </tr>
-                                                <tr class="user-row" data-username="amitPatel" data-password="ANLST123" onclick="fillCredentials('amitPatel', 'ANLST123')">
+                                                <tr class="user-row" data-username="amitPatel" onclick="fillUsername('amitPatel')">
                                                     <td><small>Amit Patel</small></td>
                                                     <td><small><strong>amitPatel</strong></small></td>
                                                     <td><span class="badge bg-info">Analyst</span></td>
                                                 </tr>
-                                                <tr class="user-row" data-username="snehaSingh" data-password="ANLST123" onclick="fillCredentials('snehaSingh', 'ANLST123')">
+                                                <tr class="user-row" data-username="snehaSingh" onclick="fillUsername('snehaSingh')">
                                                     <td><small>Sneha Singh</small></td>
                                                     <td><small><strong>snehaSingh</strong></small></td>
                                                     <td><span class="badge bg-info">Analyst</span></td>
                                                 </tr>
-                                                <tr class="user-row" data-username="rohanGupta" data-password="ANLST123" onclick="fillCredentials('rohanGupta', 'ANLST123')">
+                                                <tr class="user-row" data-username="rohanGupta" onclick="fillUsername('rohanGupta')">
                                                     <td><small>Rohan Gupta</small></td>
                                                     <td><small><strong>rohanGupta</strong></small></td>
                                                     <td><span class="badge bg-info">Analyst</span></td>
                                                 </tr>
-                                                <tr class="user-row" data-username="meeraKrishnan" data-password="ANLST123" onclick="fillCredentials('meeraKrishnan', 'ANLST123')">
+                                                <tr class="user-row" data-username="meeraKrishnan" onclick="fillUsername('meeraKrishnan')">
                                                     <td><small>Meera Krishnan</small></td>
                                                     <td><small><strong>meeraKrishnan</strong></small></td>
                                                     <td><span class="badge bg-info">Analyst</span></td>
                                                 </tr>
-                                                <tr class="user-row" data-username="arjunReddy" data-password="ENG123" onclick="fillCredentials('arjunReddy', 'ENG123')">
+                                                <tr class="user-row" data-username="arjunReddy" onclick="fillUsername('arjunReddy')">
                                                     <td><small>Arjun Reddy</small></td>
                                                     <td><small><strong>arjunReddy</strong></small></td>
                                                     <td><span class="badge bg-primary">Engineer</span></td>
                                                 </tr>
-                                                <tr class="user-row" data-username="vikramDesai" data-password="ENG123" onclick="fillCredentials('vikramDesai', 'ENG123')">
+                                                <tr class="user-row" data-username="vikramDesai" onclick="fillUsername('vikramDesai')">
                                                     <td><small>Vikram Desai</small></td>
                                                     <td><small><strong>vikramDesai</strong></small></td>
                                                     <td><span class="badge bg-primary">Engineer</span></td>
                                                 </tr>
-                                                <tr class="user-row" data-username="kavyaIyer" data-password="RESP123" onclick="fillCredentials('kavyaIyer', 'RESP123')">
+                                                <tr class="user-row" data-username="kavyaIyer" onclick="fillUsername('kavyaIyer')">
                                                     <td><small>Kavya Iyer</small></td>
                                                     <td><small><strong>kavyaIyer</strong></small></td>
                                                     <td><span class="badge bg-warning text-dark">Responder</span></td>
                                                 </tr>
-                                                <tr class="user-row" data-username="sanjayRao" data-password="RESP123" onclick="fillCredentials('sanjayRao', 'RESP123')">
+                                                <tr class="user-row" data-username="sanjayRao" onclick="fillUsername('sanjayRao')">
                                                     <td><small>Sanjay Rao</small></td>
                                                     <td><small><strong>sanjayRao</strong></small></td>
                                                     <td><span class="badge bg-warning text-dark">Responder</span></td>
                                                 </tr>
-                                                <tr class="user-row" data-username="ananyaNair" data-password="HUNT123" onclick="fillCredentials('ananyaNair', 'HUNT123')">
+                                                <tr class="user-row" data-username="ananyaNair" onclick="fillUsername('ananyaNair')">
                                                     <td><small>Ananya Nair</small></td>
                                                     <td><small><strong>ananyaNair</strong></small></td>
                                                     <td><span class="badge bg-dark">Hunter</span></td>
@@ -416,9 +420,8 @@
         }
 
         // Auto-fill credentials when user clicks on table row
-        function fillCredentials(username, password) {
+        function fillUsername(username) {
             document.getElementById('username').value = username;
-            document.getElementById('password').value = password;
             
             // Add visual feedback with glow effect
             const usernameField = document.getElementById('username');
@@ -426,21 +429,16 @@
             
             usernameField.style.borderColor = '#00d9ff';
             usernameField.style.boxShadow = '0 0 25px rgba(0, 217, 255, 0.6)';
-            passwordField.style.borderColor = '#00d9ff';
-            passwordField.style.boxShadow = '0 0 25px rgba(0, 217, 255, 0.6)';
             
             setTimeout(() => {
                 usernameField.style.borderColor = '';
                 usernameField.style.boxShadow = '';
-                passwordField.style.borderColor = '';
-                passwordField.style.boxShadow = '';
             }, 1500);
             
             // Scroll to top smoothly
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            // Focus submit button
-            document.querySelector('.login-btn').focus();
+            passwordField.focus();
         }
         
         // Initialize particles on page load

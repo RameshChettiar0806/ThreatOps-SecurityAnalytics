@@ -9,7 +9,7 @@ from sqlalchemy.sql import func
 
 # Use absolute imports for Vercel compatibility
 try:
-    from threatops.database import Base
+    from backend.database import Base
 except ImportError:
     # Fallback for local development
     from database import Base
@@ -122,8 +122,10 @@ class Alert(Base):
 
     alert_id = Column(Integer, primary_key=True, autoincrement=True)
     correlation_id = Column(Integer, ForeignKey('threat_correlation.correlation_id', ondelete='CASCADE'), nullable=False)
-    alert_type = Column(Enum('Intrusion', 'Data Breach', 'Malware', 'DDoS', 
-                             'Privilege Escalation', 'Reconnaissance'), nullable=False)
+    alert_type = Column(Enum('Intrusion', 'Data Breach', 'Malware', 'DDoS',
+                             'Privilege Escalation', 'Reconnaissance',
+                             'Lateral Movement', 'Authentication',
+                             'Protocol Anomaly', 'Exfiltration', 'Injection'), nullable=False)
     severity = Column(Enum('Low', 'Medium', 'High', 'Critical'), nullable=False)
     status = Column(Enum('Open', 'In Progress', 'Resolved', 'False Positive'), default='Open')
     assigned_to = Column(Integer, ForeignKey('users.user_id', ondelete='SET NULL'))
@@ -147,8 +149,9 @@ class AuditLog(Base):
 
     audit_id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey('users.user_id', ondelete='SET NULL'))
-    action_type = Column(Enum('LOGIN', 'LOGOUT', 'QUERY_EXECUTION', 
-                              'ALERT_CREATION', 'USER_MANAGEMENT', 'DATA_MODIFICATION'), nullable=False)
+    action_type = Column(Enum('LOGIN', 'LOGOUT', 'QUERY_EXECUTION',
+                              'CSV_UPLOAD', 'ALERT_CREATION',
+                              'USER_MANAGEMENT', 'DATA_MODIFICATION'), nullable=False)
     action_details = Column(Text)
     ip_address = Column(String(45))
     timestamp = Column(TIMESTAMP, server_default=func.current_timestamp())

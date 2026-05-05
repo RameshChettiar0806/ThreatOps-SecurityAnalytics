@@ -142,6 +142,7 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'X-CSRF-Token': window.csrfToken,
                 },
                 body: JSON.stringify({ user_id: userId, new_role: newRole })
             })
@@ -170,6 +171,7 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'X-CSRF-Token': window.csrfToken,
                 },
                 body: JSON.stringify({ user_id: userId, is_active: !isActive })
             })

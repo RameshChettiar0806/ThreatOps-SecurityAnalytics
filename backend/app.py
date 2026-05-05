@@ -1,8 +1,11 @@
 """Flask application for ThreatOps SIEM with Authentication & RBAC."""
 
 import hashlib
+import hmac
 import logging
 import os
+import re
+import secrets
 from datetime import datetime
 from functools import wraps
 from pathlib import Path
@@ -10,11 +13,16 @@ from pathlib import Path
 from flask import Flask, jsonify, render_template, request, session, redirect, url_for, flash
 from sqlalchemy import func, text
 from sqlalchemy.exc import SQLAlchemyError
+from werkzeug.security import check_password_hash, generate_password_hash
+
+# Resolve frontend paths relative to this file
+_BACKEND_DIR = Path(__file__).resolve().parent
+_FRONTEND_DIR = _BACKEND_DIR.parent / "frontend"
 
 # Use absolute imports for Vercel compatibility
 try:
-    from threatops.database import Base, SessionLocal, engine
-    from threatops.models import (
+    from backend.database import Base, SessionLocal, engine
+    from backend.models import (
         User, RawLog, MitreAttackTechnique, MitreDefendCountermeasure,
         ThreatCorrelation, Alert, AuditLog
     )
@@ -31,11 +39,130 @@ except ImportError:
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    template_folder=str(_FRONTEND_DIR / "templates"),
+    static_folder=str(_FRONTEND_DIR / "static"),
+)
 app.secret_key = os.getenv('SECRET_KEY', 'threatops_secret_key_change_in_production')
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 app.config['SESSION_COOKIE_SECURE'] = os.getenv('VERCEL') is not None  # Secure cookies in production
+
+READ_ONLY_ROLES = {'Manager', 'Analyst', 'Responder', 'Hunter'}
+ENGINEER_RESTRICTED_PREFIXES = {'GRANT', 'REVOKE', 'COMMIT', 'ROLLBACK', 'SAVEPOINT'}
+BLOCKED_READ_ONLY_KEYWORDS = {
+    'ALTER', 'CALL', 'CREATE', 'DELETE', 'DROP', 'GRANT',
+    'INSERT', 'MERGE', 'REPLACE', 'REVOKE', 'TRUNCATE', 'UPDATE'
+}
+ALLOWED_ALERT_STATUSES = {'Open', 'In Progress', 'Resolved', 'False Positive'}
+VALID_ROLES = {'Admin', 'Analyst', 'Manager', 'Engineer', 'Responder', 'Hunter'}
+
+
+def _generate_csrf_token():
+    """Return the per-session CSRF token, creating it lazily when needed."""
+    token = session.get('_csrf_token')
+    if not token:
+        token = secrets.token_urlsafe(32)
+        session['_csrf_token'] = token
+    return token
+
+
+def _request_csrf_token():
+    """Read the token from either JSON headers or standard form data."""
+    return (
+        request.headers.get('X-CSRF-Token')
+        or request.form.get('csrf_token')
+        or request.headers.get('X-CSRFToken')
+    )
+
+
+def _enforce_csrf():
+    """Validate CSRF tokens for state-changing requests."""
+    session_token = session.get('_csrf_token')
+    request_token = _request_csrf_token()
+    if not session_token or not request_token:
+        return False
+    return hmac.compare_digest(session_token, request_token)
+
+
+def _normalize_query(query):
+    """Normalize incoming SQL so simple role checks stay reliable."""
+    stripped = (query or '').strip()
+    stripped = re.sub(r'^\s*(--[^\n]*\n|/\*.*?\*/\s*)+', '', stripped, flags=re.DOTALL)
+    return stripped.strip()
+
+
+def _first_sql_keyword(query):
+    """Return the first SQL keyword, uppercased."""
+    normalized = _normalize_query(query)
+    if not normalized:
+        return ''
+    return normalized.split(None, 1)[0].rstrip(';').upper()
+
+
+def _validate_query_permissions(role, query):
+    """Validate a raw SQL query against the classroom demo role policy."""
+    normalized = _normalize_query(query)
+    if not normalized:
+        return "Query cannot be empty."
+
+    if ';' in normalized.rstrip(';'):
+        return "Only one SQL statement can be executed at a time."
+
+    query_upper = normalized.upper()
+    first_keyword = _first_sql_keyword(normalized)
+
+    if role in READ_ONLY_ROLES:
+        if first_keyword != 'SELECT':
+            return f"{role}s can only execute SELECT queries."
+        for keyword in BLOCKED_READ_ONLY_KEYWORDS:
+            if re.search(rf'\b{keyword}\b', query_upper):
+                return f"Keyword '{keyword}' is not allowed for {role}s."
+
+    if role == 'Engineer' and first_keyword in ENGINEER_RESTRICTED_PREFIXES:
+        return f"Engineers cannot execute {first_keyword} statements."
+
+    return None
+
+
+def _is_legacy_sha256_hash(password_hash):
+    """Return True when a stored password looks like the old unsalted SHA-256 hash."""
+    return bool(re.fullmatch(r'[0-9a-f]{64}', (password_hash or '').lower()))
+
+
+def _verify_password(stored_hash, password):
+    """Check both modern Werkzeug hashes and the legacy SHA-256 classroom hashes."""
+    if not stored_hash:
+        return False
+    if _is_legacy_sha256_hash(stored_hash):
+        legacy_hash = hashlib.sha256(password.encode()).hexdigest()
+        return hmac.compare_digest(stored_hash, legacy_hash)
+    return check_password_hash(stored_hash, password)
+
+
+app.jinja_env.globals['csrf_token'] = _generate_csrf_token
+
+
+@app.before_request
+def csrf_protect():
+    """Apply CSRF protection to authenticated, state-changing routes."""
+    if request.method not in {'POST', 'PUT', 'PATCH', 'DELETE'}:
+        return None
+    if request.endpoint in {'login'}:
+        return None
+    if 'user_id' not in session:
+        return None
+    if not _enforce_csrf():
+        return jsonify({"error": "Invalid or missing CSRF token."}), 403
+    return None
+
+
+@app.context_processor
+def inject_template_context():
+    """Expose shared template helpers."""
+    return {"csrf_token_value": _generate_csrf_token()}
+
 
 
 def init_db():
@@ -51,20 +178,26 @@ def init_db():
 
 
 def ensure_default_users():
-    """Seed demo users used in README if they are missing."""
+    """Seed SOC/CIRT team users displayed on the login page."""
     default_users = [
-        {
-            "username": "admin",
-            "password": "admin123",
-            "role": "Admin",
-            "email": "admin@threatops.local",
-        },
-        {
-            "username": "analyst",
-            "password": "analyst123",
-            "role": "Analyst",
-            "email": "analyst@threatops.local",
-        },
+        # Admins
+        {"username": "rajeshKumar",   "password": "ADM123",   "role": "Admin",     "email": "rajesh.kumar@threatops.local"},
+        {"username": "deepakVerma",   "password": "ADM123",   "role": "Admin",     "email": "deepak.verma@threatops.local"},
+        # Manager
+        {"username": "priyaSharma",   "password": "MGR123",   "role": "Manager",   "email": "priya.sharma@threatops.local"},
+        # Analysts
+        {"username": "amitPatel",     "password": "ANLST123", "role": "Analyst",   "email": "amit.patel@threatops.local"},
+        {"username": "snehaSingh",    "password": "ANLST123", "role": "Analyst",   "email": "sneha.singh@threatops.local"},
+        {"username": "rohanGupta",    "password": "ANLST123", "role": "Analyst",   "email": "rohan.gupta@threatops.local"},
+        {"username": "meeraKrishnan", "password": "ANLST123", "role": "Analyst",   "email": "meera.krishnan@threatops.local"},
+        # Engineers
+        {"username": "arjunReddy",    "password": "ENG123",   "role": "Engineer",  "email": "arjun.reddy@threatops.local"},
+        {"username": "vikramDesai",   "password": "ENG123",   "role": "Engineer",  "email": "vikram.desai@threatops.local"},
+        # Responders
+        {"username": "kavyaIyer",     "password": "RESP123",  "role": "Responder", "email": "kavya.iyer@threatops.local"},
+        {"username": "sanjayRao",     "password": "RESP123",  "role": "Responder", "email": "sanjay.rao@threatops.local"},
+        # Hunter
+        {"username": "ananyaNair",    "password": "HUNT123",  "role": "Hunter",    "email": "ananya.nair@threatops.local"},
     ]
 
     db = SessionLocal()
@@ -74,6 +207,10 @@ def ensure_default_users():
                 func.lower(User.username) == user_data["username"].lower()
             ).first()
             if existing_user:
+                # Keep demo credentials valid while avoiding unnecessary rehashes on each boot.
+                if not _verify_password(existing_user.password_hash, user_data["password"]):
+                    existing_user.password_hash = hash_password(user_data["password"])
+                existing_user.is_active = True
                 continue
 
             db.add(
@@ -96,8 +233,8 @@ def ensure_default_users():
 
 
 def hash_password(password):
-    """Hash password using SHA256."""
-    return hashlib.sha256(password.encode()).hexdigest()
+    """Hash password with Werkzeug's adaptive KDF."""
+    return generate_password_hash(password)
 
 
 def login_required(f):
@@ -185,6 +322,18 @@ def format_indian_currency(value):
 app.jinja_env.filters['indian_currency'] = format_indian_currency
 
 
+@app.route("/health")
+def health():
+    """Lightweight liveness check for classroom demos and deployment probes."""
+    try:
+        with engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+        return jsonify({"status": "ok", "database": "connected"})
+    except Exception as e:
+        logger.error(f"Health check failed: {e}")
+        return jsonify({"status": "error", "database": "unavailable"}), 503
+
+
 # ================================================================
 # AUTHENTICATION ROUTES
 # ================================================================
@@ -212,14 +361,14 @@ def login():
     
     db = SessionLocal()
     try:
-        password_hash = hash_password(password)
         user = db.query(User).filter(
             func.lower(User.username) == username.lower(),
-            User.password_hash == password_hash,
             User.is_active == True
         ).first()
         
-        if user:
+        if user and _verify_password(user.password_hash, password):
+            if _is_legacy_sha256_hash(user.password_hash):
+                user.password_hash = hash_password(password)
             # Update last login
             user.last_login = datetime.now()
             db.commit()
@@ -228,6 +377,7 @@ def login():
             session['user_id'] = user.user_id
             session['username'] = user.username
             session['role'] = user.role
+            session['_csrf_token'] = session.get('_csrf_token') or secrets.token_urlsafe(32)
             
             # Log successful login
             log_audit(user.user_id, 'LOGIN', f'User {username} logged in successfully')
@@ -245,6 +395,7 @@ def login():
         return render_template("login.html")
     finally:
         db.close()
+
 
 
 @app.route("/logout")
@@ -482,24 +633,10 @@ def run_query():
     
     user_id = session.get('user_id')
     role = session.get('role')
-    
-    # Role-based query validation
-    # Read-only roles: Manager, Analyst, Responder, Hunter
-    # Full access roles: Admin, Engineer
-    read_only_roles = ['Manager', 'Analyst', 'Responder', 'Hunter']
-    
-    if role in read_only_roles:
-        # Read-only roles can only run SELECT queries
-        if not query.upper().startswith('SELECT'):
-            return jsonify({"error": f"{role}s can only execute SELECT queries."}), 403
-        
-        # Block dangerous operations
-        dangerous_keywords = ['DROP', 'DELETE', 'UPDATE', 'INSERT', 'ALTER', 'CREATE', 'GRANT', 'REVOKE']
-        for keyword in dangerous_keywords:
-            if keyword in query.upper():
-                return jsonify({"error": f"Keyword '{keyword}' is not allowed for {role}s."}), 403
-    
-    # Admin and Engineer have full access (but still log everything)
+
+    validation_error = _validate_query_permissions(role, query)
+    if validation_error:
+        return jsonify({"error": validation_error}), 403
     
     db = SessionLocal()
     try:
@@ -567,8 +704,7 @@ def change_user_role():
         return jsonify({"error": "Missing user_id or new_role"}), 400
     
     # Validate role
-    valid_roles = ['Admin', 'Analyst', 'Manager', 'Engineer', 'Responder', 'Hunter']
-    if new_role not in valid_roles:
+    if new_role not in VALID_ROLES:
         return jsonify({"error": "Invalid role"}), 400
     
     db = SessionLocal()
@@ -720,6 +856,8 @@ def update_alert_status():
     
     if not alert_id or not new_status:
         return jsonify({"error": "Missing alert_id or status"}), 400
+    if new_status not in ALLOWED_ALERT_STATUSES:
+        return jsonify({"error": "Invalid alert status"}), 400
     
     db = SessionLocal()
     try:

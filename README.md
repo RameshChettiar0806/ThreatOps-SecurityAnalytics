@@ -1,107 +1,77 @@
 # ThreatOps Security Analytics Platform
 
-*A comprehensive SIEM platform with MITRE ATT&CK integration, role-based access control, and advanced SQL features*
+ThreatOps is a classroom SIEM demo built with Flask, SQLAlchemy, Bootstrap, and PostgreSQL. It showcases RBAC, MITRE ATT&CK/D3FEND mappings, audit logging, dashboard analytics, and a role-aware SQL panel.
 
----
-
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
-- Python 3.8+
-- MySQL 5.7+ or 8.0+ (for local development)
+- Python 3.10+
+- PostgreSQL 14+
 - pip
 
-### Setup Steps
+### Setup
 
-1. **Clone Repository**
-   ```bash
-   git clone https://github.com/RameshChettiar0806/ThreatOps-SecurityAnalytics.git
-   cd ThreatOps-SecurityAnalytics
-   ```
+```bash
+git clone https://github.com/RameshChettiar0806/ThreatOps-SecurityAnalytics.git
+cd ThreatOps-SecurityAnalytics
 
-2. **Setup Environment**
-   ```bash
-   # Windows
-   python -m venv venv
-   venv\Scripts\activate
-   pip install -r threatops/requirements.txt
-   
-   # Linux/Mac
-   python3 -m venv venv
-   source venv/bin/activate
-   pip install -r threatops/requirements.txt
-   ```
+python -m venv venv
+venv\Scripts\activate
 
-3. **Initialize Database**
-   ```bash
-   mysql -u root -p < threatops/schema.sql
-   ```
-   
-   Configure your `.env` file:
-   ```env
-   DATABASE_URL=mysql+mysqlconnector://root:root@localhost:3306/threatops
-   SECRET_KEY=dev-secret-key-change-in-production
-   ```
+pip install -r requirements.txt
+copy .env.example .env
+```
 
-4. **Run Application** (Easy Mode! 🎯)
-   
-   **Option A - PowerShell:**
-   ```powershell
-   .\run.ps1
-   ```
-   
-   **Option B - Command Prompt:**
-   ```cmd
-   run.bat
-   ```
-   
-   **Option C - Manual:**
-   ```bash
-   venv\Scripts\activate
-   set PYTHONPATH=%CD%
-   python threatops\app.py
-   ```
+Create a PostgreSQL database named `threatops`, then load the schema:
 
-**Access:** http://127.0.0.1:5000
+```bash
+psql -U postgres -d threatops -f backend/schema_supabase.sql
+```
 
-### Default Credentials
+Update `.env` as needed:
 
-| Username | Password | Role | Access |
-|----------|----------|------|--------|
-| admin | admin123 | Admin | Full access (DDL/DML/DQL/TCL/DCL) |
-| analyst | analyst123 | Analyst | SELECT only |
+```env
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/threatops
+SECRET_KEY=change-this-for-your-own-demo-instance
+```
 
----
+Run the app:
 
-## 📖 Documentation
+```bash
+python backend/app.py
+```
 
-For complete documentation, see **[DOCS.md](DOCS.md)**
+Open [http://127.0.0.1:5000/login](http://127.0.0.1:5000/login).
 
-- Installation & Setup
-- User Guide
-- Role Management
-- Database Schema
-- API Reference
-- Troubleshooting
+## Demo Credentials
 
----
+These seeded accounts are meant for classroom presentation only:
 
-## 🔑 Key Features
+| Username | Password | Role |
+|----------|----------|------|
+| rajeshKumar | ADM123 | Admin |
+| deepakVerma | ADM123 | Admin |
+| priyaSharma | MGR123 | Manager |
+| amitPatel | ANLST123 | Analyst |
+| snehaSingh | ANLST123 | Analyst |
+| rohanGupta | ANLST123 | Analyst |
+| meeraKrishnan | ANLST123 | Analyst |
+| arjunReddy | ENG123 | Engineer |
+| vikramDesai | ENG123 | Engineer |
+| kavyaIyer | RESP123 | Responder |
+| sanjayRao | RESP123 | Responder |
+| ananyaNair | HUNT123 | Hunter |
 
-- Role-based access control (6 roles with unique colors)
-- MITRE ATT&CK/D3FEND integration
-- Advanced SQL (views, procedures, triggers)
-- Real-time threat correlation
-- Interactive analytics & visualizations
-- Session-based authentication
-- SQL injection prevention via ORM
-- Role-based route protection
-- Complete audit logging
+## Notes
 
-## 📝 License
+- This repo is optimized for a classroom demo, not for internet-facing production use.
+- The SQL panel is intentionally powerful for teaching database concepts, but it still applies role-based restrictions.
+- Passwords are now hashed with Werkzeug, authenticated POST routes use CSRF protection, and demo passwords are no longer embedded in the login page.
 
-MIT License - See [LICENSE](LICENSE)
+## Documentation
 
----
+Full setup and walkthrough: [SETUP.md](</C:/Users/Ramesh/Personal Folders/College/SRM/SEMESTERS/SEMESTER-4/GitHub/ThreatOps-SecurityAnalytics/SETUP.md>)
 
-**Built for DBMS Lab | SRM Institute of Science and Technology**
+## License
+
+MIT License. See [LICENSE](</C:/Users/Ramesh/Personal Folders/College/SRM/SEMESTERS/SEMESTER-4/GitHub/ThreatOps-SecurityAnalytics/LICENSE>).
