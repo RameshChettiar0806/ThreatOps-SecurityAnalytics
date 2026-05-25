@@ -72,6 +72,8 @@ These seeded accounts are meant for classroom presentation only:
 
 Full setup and walkthrough: [SETUP.md](</C:/Users/Ramesh/Personal Folders/College/SRM/SEMESTERS/SEMESTER-4/GitHub/ThreatOps-SecurityAnalytics/SETUP.md>)
 
+Vercel + Supabase deployment guide: [VERCEL.md](</C:/Users/Ramesh/Personal Folders/College/SRM/SEMESTERS/SEMESTER-4/GitHub/ThreatOps-SecurityAnalytics/VERCEL.md>)
+
 ## License
 
 MIT License. See [LICENSE](</C:/Users/Ramesh/Personal Folders/College/SRM/SEMESTERS/SEMESTER-4/GitHub/ThreatOps-SecurityAnalytics/LICENSE>).
